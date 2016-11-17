@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'MVMedia'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of MVMedia.'
+  s.summary          = 'Play Sounds and Videos with AvPlayer.'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,19 +18,19 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+Play Media from any app using this library.
                        DESC
 
-  s.homepage         = 'https://github.com/<GITHUB_USERNAME>/MVMedia'
+  s.homepage         = 'https://github.com/mindvalley/Mobile_iOS_Library_MVMedia'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'Evandro Harrison Hoffmann' => 'ehh85@yahoo.com.br' }
-  s.source           = { :git => 'https://github.com/<GITHUB_USERNAME>/MVMedia.git', :tag => s.version.to_s }
+  s.author           = { 'Evandro Harrison Hoffmann' => 'evandro@mindvalley.com' }
+  s.source           = { :git => 'https://github.com/mindvalley/Mobile_iOS_Library_MVMedia.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '8.0'
 
-  s.source_files = 'MVMedia/Classes/**/*'
+  s.source_files = 'MVMedia/Classes/**/*.{swift}'
   
   # s.resource_bundles = {
   #   'MVMedia' => ['MVMedia/Assets/*.png']

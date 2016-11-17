@@ -1,0 +1,16 @@
+PODS:
+  - MVMedia (0.1.0)
+
+DEPENDENCIES:
+  - MVMedia (from `../`)
+
+EXTERNAL SOURCES:
+  MVMedia:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  MVMedia: b30c8cec9606d8451c5401006e6c66ab9da2b52d
+
+PODFILE CHECKSUM: 0e448724cee102182a2864ada05cd6372e83e8f7
+
+COCOAPODS: 1.0.1

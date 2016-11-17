@@ -1,25 +1,76 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="vXZ-lx-hvc">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController id="vXZ-lx-hvc" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="vXZ-lx-hvc" customClass="ViewController" customModule="MVMedia_Example" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QC6-ms-wGH">
+                                <rect key="frame" x="137" y="208" width="100" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="BVd-gR-AGq"/>
+                                    <constraint firstAttribute="width" constant="100" id="Rw9-iS-bxk"/>
+                                </constraints>
+                                <state key="normal" title="Play Video"/>
+                                <connections>
+                                    <segue destination="qsK-qe-eoY" kind="presentation" id="i1j-8H-Q0d"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F6o-9C-Uls">
+                                <rect key="frame" x="137" y="408" width="100" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="9hY-N6-huH"/>
+                                    <constraint firstAttribute="width" constant="100" id="mGP-MM-etQ"/>
+                                </constraints>
+                                <state key="normal" title="Play Audio"/>
+                                <connections>
+                                    <segue destination="s8w-Be-Tgg" kind="presentation" id="Thm-Dj-JBf"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="F6o-9C-Uls" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="Ufa-g7-nwb"/>
+                            <constraint firstItem="QC6-ms-wGH" firstAttribute="centerY" secondItem="kh9-bI-dsS" secondAttribute="centerY" constant="-100" id="ahd-7K-uCa"/>
+                            <constraint firstItem="QC6-ms-wGH" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="n3f-yC-vhq"/>
+                            <constraint firstItem="F6o-9C-Uls" firstAttribute="centerY" secondItem="kh9-bI-dsS" secondAttribute="centerY" constant="100" id="z7u-07-xD2"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
+        </scene>
+        <!--MediaVideoNavigation-->
+        <scene sceneID="Yta-cf-6Sl">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Media" referencedIdentifier="MediaVideoNavigation" id="qsK-qe-eoY" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RWB-cj-YtG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="736" y="40"/>
+        </scene>
+        <!--MediaAudio-->
+        <scene sceneID="HTa-xl-Sat">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Media" referencedIdentifier="MediaAudio" id="s8w-Be-Tgg" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SRp-al-Ift" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="706" y="246"/>
         </scene>
     </scenes>
 </document>

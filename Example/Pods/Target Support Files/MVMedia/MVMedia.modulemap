@@ -1,0 +1,6 @@
+framework module MVMedia {
+  umbrella header "MVMedia-umbrella.h"
+
+  export *
+  module * { export * }
+}
