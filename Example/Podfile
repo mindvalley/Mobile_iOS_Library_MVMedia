@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'MVMedia_Example' do
+  pod 'MVMedia', :path => '../'
+
+  target 'MVMedia_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
