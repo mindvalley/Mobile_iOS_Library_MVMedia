@@ -7,9 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0AB85D821DDD4AD500E8A34E /* MediaMarkersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB85D7E1DDD4AD500E8A34E /* MediaMarkersViewController.swift */; };
-		0AB85D831DDD4AD500E8A34E /* MediaVideoNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB85D7F1DDD4AD500E8A34E /* MediaVideoNavigationController.swift */; };
-		0AB85D841DDD4AD500E8A34E /* MediaVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB85D801DDD4AD500E8A34E /* MediaVideoViewController.swift */; };
 		0AB85D851DDD4AD500E8A34E /* MediaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB85D811DDD4AD500E8A34E /* MediaViewController.swift */; };
 		0AB85D881DDD4B1800E8A34E /* Media.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0AB85D861DDD4B1800E8A34E /* Media.storyboard */; };
 		0AB85D8A1DDD4BB600E8A34E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB85D891DDD4BB600E8A34E /* ViewController.swift */; };
@@ -34,9 +31,6 @@
 
 /* Begin PBXFileReference section */
 		02EF8636B4C61906CDA414ED /* Pods_MVMedia_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MVMedia_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		0AB85D7E1DDD4AD500E8A34E /* MediaMarkersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaMarkersViewController.swift; sourceTree = "<group>"; };
-		0AB85D7F1DDD4AD500E8A34E /* MediaVideoNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaVideoNavigationController.swift; sourceTree = "<group>"; };
-		0AB85D801DDD4AD500E8A34E /* MediaVideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaVideoViewController.swift; sourceTree = "<group>"; };
 		0AB85D811DDD4AD500E8A34E /* MediaViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaViewController.swift; sourceTree = "<group>"; };
 		0AB85D871DDD4B1800E8A34E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Media.storyboard; sourceTree = "<group>"; };
 		0AB85D891DDD4BB600E8A34E /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -82,9 +76,6 @@
 		0AB85D7D1DDD4AD500E8A34E /* Media */ = {
 			isa = PBXGroup;
 			children = (
-				0AB85D7E1DDD4AD500E8A34E /* MediaMarkersViewController.swift */,
-				0AB85D7F1DDD4AD500E8A34E /* MediaVideoNavigationController.swift */,
-				0AB85D801DDD4AD500E8A34E /* MediaVideoViewController.swift */,
 				0AB85D811DDD4AD500E8A34E /* MediaViewController.swift */,
 			);
 			name = Media;
@@ -234,7 +225,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = CocoaPods;
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
@@ -389,11 +380,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				0AB85D8A1DDD4BB600E8A34E /* ViewController.swift in Sources */,
-				0AB85D831DDD4AD500E8A34E /* MediaVideoNavigationController.swift in Sources */,
 				0AB85D851DDD4AD500E8A34E /* MediaViewController.swift in Sources */,
-				0AB85D821DDD4AD500E8A34E /* MediaMarkersViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
-				0AB85D841DDD4AD500E8A34E /* MediaVideoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -456,8 +444,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -501,8 +491,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -521,6 +513,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -529,6 +522,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 182FBE60431619DC760DEB58 /* Pods-MVMedia_Example.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = S2DSCP4F3H;
 				INFOPLIST_FILE = MVMedia/Info.plist;
@@ -544,6 +538,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3F63091F4699F13392223349 /* Pods-MVMedia_Example.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = S2DSCP4F3H;
 				INFOPLIST_FILE = MVMedia/Info.plist;

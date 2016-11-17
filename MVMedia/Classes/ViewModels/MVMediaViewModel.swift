@@ -22,6 +22,7 @@ open class MVMediaViewModel: NSObject {
     open var coverImagePath: String?
     open var authorName: String?
     open var offlineAsset = false
+    open var mediaMarkers = [MVMediaMarker]()
     
     open var offlineFileDestination: URL?{
         guard let downloadUrl = downloadUrl else {

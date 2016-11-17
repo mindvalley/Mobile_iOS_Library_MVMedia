@@ -10,13 +10,15 @@
 		0AB85D731DDD4A7400E8A34E /* MVMediaMarkerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB85D651DDD4A7400E8A34E /* MVMediaMarkerTableViewCell.swift */; };
 		0AB85D741DDD4A7400E8A34E /* DragCloseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB85D671DDD4A7400E8A34E /* DragCloseViewController.swift */; };
 		0AB85D751DDD4A7400E8A34E /* MVMediaMarkersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB85D681DDD4A7400E8A34E /* MVMediaMarkersViewController.swift */; };
-		0AB85D761DDD4A7400E8A34E /* MVMediaVideoNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB85D691DDD4A7400E8A34E /* MVMediaVideoNavigationViewController.swift */; };
+		0AB85D761DDD4A7400E8A34E /* MVMediaLandscapeNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB85D691DDD4A7400E8A34E /* MVMediaLandscapeNavigationController.swift */; };
 		0AB85D771DDD4A7400E8A34E /* MVMediaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB85D6A1DDD4A7400E8A34E /* MVMediaViewController.swift */; };
 		0AB85D781DDD4A7400E8A34E /* AVPlayerItem+MV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB85D6C1DDD4A7400E8A34E /* AVPlayerItem+MV.swift */; };
 		0AB85D791DDD4A7400E8A34E /* MVMediaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB85D6D1DDD4A7400E8A34E /* MVMediaManager.swift */; };
 		0AB85D7A1DDD4A7400E8A34E /* MVMediaMarkersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB85D6F1DDD4A7400E8A34E /* MVMediaMarkersViewModel.swift */; };
 		0AB85D7B1DDD4A7400E8A34E /* MVMediaViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB85D701DDD4A7400E8A34E /* MVMediaViewModel.swift */; };
 		0AB85D7C1DDD4A7400E8A34E /* MVMediaPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB85D721DDD4A7400E8A34E /* MVMediaPlayerView.swift */; };
+		0AB85D8D1DDD7C8F00E8A34E /* MVMediaTrackingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB85D8C1DDD7C8F00E8A34E /* MVMediaTrackingDelegate.swift */; };
+		0AB85D951DDDD12500E8A34E /* MVMediaLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB85D941DDDD12500E8A34E /* MVMediaLoadingView.swift */; };
 		17FE3F54D1BE780774D2DA3763B157C8 /* Pods-MVMedia_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = D5B361CB25A2AD537ECB338B7F0E4D9E /* Pods-MVMedia_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		20B51CFF2EC1F91B3C772D1B51558609 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEC22C73C1608DFA5D5D78BDCB218219 /* Foundation.framework */; };
 		47A92886012BD79AD251DF2C7FEBAED8 /* MVMedia-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = EB5C6D87044F5482AD6A25FD0A610196 /* MVMedia-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -42,13 +44,15 @@
 		0AB85D651DDD4A7400E8A34E /* MVMediaMarkerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVMediaMarkerTableViewCell.swift; sourceTree = "<group>"; };
 		0AB85D671DDD4A7400E8A34E /* DragCloseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DragCloseViewController.swift; sourceTree = "<group>"; };
 		0AB85D681DDD4A7400E8A34E /* MVMediaMarkersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVMediaMarkersViewController.swift; sourceTree = "<group>"; };
-		0AB85D691DDD4A7400E8A34E /* MVMediaVideoNavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVMediaVideoNavigationViewController.swift; sourceTree = "<group>"; };
+		0AB85D691DDD4A7400E8A34E /* MVMediaLandscapeNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVMediaLandscapeNavigationController.swift; sourceTree = "<group>"; };
 		0AB85D6A1DDD4A7400E8A34E /* MVMediaViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVMediaViewController.swift; sourceTree = "<group>"; };
 		0AB85D6C1DDD4A7400E8A34E /* AVPlayerItem+MV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AVPlayerItem+MV.swift"; sourceTree = "<group>"; };
 		0AB85D6D1DDD4A7400E8A34E /* MVMediaManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVMediaManager.swift; sourceTree = "<group>"; };
 		0AB85D6F1DDD4A7400E8A34E /* MVMediaMarkersViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVMediaMarkersViewModel.swift; sourceTree = "<group>"; };
 		0AB85D701DDD4A7400E8A34E /* MVMediaViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVMediaViewModel.swift; sourceTree = "<group>"; };
 		0AB85D721DDD4A7400E8A34E /* MVMediaPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVMediaPlayerView.swift; sourceTree = "<group>"; };
+		0AB85D8C1DDD7C8F00E8A34E /* MVMediaTrackingDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVMediaTrackingDelegate.swift; sourceTree = "<group>"; };
+		0AB85D941DDDD12500E8A34E /* MVMediaLoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVMediaLoadingView.swift; sourceTree = "<group>"; };
 		0DCC35B67D9FA9BB178B95744EC62955 /* Pods-MVMedia_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-MVMedia_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
 		13664834CFCAB90142FA3A395C1703CA /* Pods-MVMedia_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-MVMedia_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		15F9B680555253F20DF6C1F840F0EC72 /* Pods-MVMedia_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MVMedia_Tests.release.xcconfig"; sourceTree = "<group>"; };
@@ -137,8 +141,8 @@
 			children = (
 				0AB85D671DDD4A7400E8A34E /* DragCloseViewController.swift */,
 				0AB85D681DDD4A7400E8A34E /* MVMediaMarkersViewController.swift */,
-				0AB85D691DDD4A7400E8A34E /* MVMediaVideoNavigationViewController.swift */,
 				0AB85D6A1DDD4A7400E8A34E /* MVMediaViewController.swift */,
+				0AB85D691DDD4A7400E8A34E /* MVMediaLandscapeNavigationController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -165,8 +169,17 @@
 			isa = PBXGroup;
 			children = (
 				0AB85D721DDD4A7400E8A34E /* MVMediaPlayerView.swift */,
+				0AB85D941DDDD12500E8A34E /* MVMediaLoadingView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		0AB85D8B1DDD7C7400E8A34E /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				0AB85D8C1DDD7C8F00E8A34E /* MVMediaTrackingDelegate.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		2B57FCD0C3EEAAD1648A8E1606A5325A /* Targets Support Files */ = {
@@ -210,6 +223,7 @@
 				0AB85D641DDD4A7400E8A34E /* Cells */,
 				0AB85D661DDD4A7400E8A34E /* Controllers */,
 				0AB85D6B1DDD4A7400E8A34E /* Library */,
+				0AB85D8B1DDD7C7400E8A34E /* Protocols */,
 				0AB85D6E1DDD4A7400E8A34E /* ViewModels */,
 				0AB85D711DDD4A7400E8A34E /* Views */,
 			);
@@ -424,8 +438,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				0AB85D751DDD4A7400E8A34E /* MVMediaMarkersViewController.swift in Sources */,
+				0AB85D8D1DDD7C8F00E8A34E /* MVMediaTrackingDelegate.swift in Sources */,
 				0AB85D7A1DDD4A7400E8A34E /* MVMediaMarkersViewModel.swift in Sources */,
 				0AB85D7C1DDD4A7400E8A34E /* MVMediaPlayerView.swift in Sources */,
+				0AB85D951DDDD12500E8A34E /* MVMediaLoadingView.swift in Sources */,
 				0AB85D7B1DDD4A7400E8A34E /* MVMediaViewModel.swift in Sources */,
 				0AB85D731DDD4A7400E8A34E /* MVMediaMarkerTableViewCell.swift in Sources */,
 				0AB85D771DDD4A7400E8A34E /* MVMediaViewController.swift in Sources */,
@@ -433,7 +449,7 @@
 				AB2B8C90D0FB7048485973925807ADDF /* MVMedia-dummy.m in Sources */,
 				0AB85D791DDD4A7400E8A34E /* MVMediaManager.swift in Sources */,
 				0AB85D781DDD4A7400E8A34E /* AVPlayerItem+MV.swift in Sources */,
-				0AB85D761DDD4A7400E8A34E /* MVMediaVideoNavigationViewController.swift in Sources */,
+				0AB85D761DDD4A7400E8A34E /* MVMediaLandscapeNavigationController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -26,12 +26,12 @@ public let videoAutoHideTime: Double = 3
 
 open class MVMediaManager: NSObject {
     
-    open static let sharedInstance = MVMediaManager()
+    open static let shared = MVMediaManager()
     
     open let avPlayer = AVPlayer()
     open var avPlayerLayer = AVPlayerLayer()
     open let notificationCenter = NotificationCenter()
-    open var isPlayingVideo = false
+    open var isPlayingLandscapeMedia = false
     open var playerIsPlaying: Bool {
         return avPlayer.rate > 0
     }
@@ -45,15 +45,15 @@ open class MVMediaManager: NSObject {
     fileprivate var currentURL: URL?
     
     open static func isPlaying(_ url: URL?) -> Bool {
-        if MVMediaManager.sharedInstance.avPlayer.rate == 0 {
+        if MVMediaManager.shared.avPlayer.rate == 0 {
             return false
         }
         
-        if MVMediaManager.sharedInstance.currentURL == nil {
+        if MVMediaManager.shared.currentURL == nil {
             return false
         }
         
-        return MVMediaManager.sharedInstance.currentURL == url
+        return MVMediaManager.shared.currentURL == url
     }
     
 }
@@ -62,7 +62,7 @@ open class MVMediaManager: NSObject {
 
 extension MVMediaManager {
     
-    public func playItem(withUrl url: URL?, replaceCurrent: Bool = false) -> Bool {
+    public func prepareMedia(withUrl url: URL?, replaceCurrent: Bool = false, startPlaying: Bool = false) -> Bool {
         guard let url = url else {
             return false
         }
@@ -88,7 +88,7 @@ extension MVMediaManager {
                                                object: avPlayer.currentItem)
         
         //start playing right away if not a video as we want to improve it's quality before start playing
-        if !isPlayingVideo {
+        if startPlaying {
             play()
         }
         
@@ -120,7 +120,7 @@ extension MVMediaManager {
     }
     
     public func stop(){
-        isPlayingVideo = false
+        isPlayingLandscapeMedia = false
         
         if avPlayer.currentItem == nil {
             return
@@ -177,7 +177,7 @@ extension MVMediaManager {
     // MARK: - Seek Slider Events
     
     public func sliderValueUpdated(_ timeSliderValue: Float){
-        guard let currentItem = MVMediaManager.sharedInstance.avPlayer.currentItem else {
+        guard let currentItem = MVMediaManager.shared.avPlayer.currentItem else {
             return
         }
         notificationCenter.post(name: Notification.Name(rawValue: kMVMediaTimeUpdated), object: currentItem)
@@ -258,7 +258,7 @@ extension MVMediaManager {
     
     fileprivate func removeTimeObserver(){
         if timeObserver != nil {
-            MVMediaManager.sharedInstance.avPlayer.removeTimeObserver(timeObserver!)
+            MVMediaManager.shared.avPlayer.removeTimeObserver(timeObserver!)
             timeObserver?.invalidate()
             timeObserver = nil
         }
@@ -266,7 +266,7 @@ extension MVMediaManager {
     
     fileprivate func addTimeObserver(){
         let timeInterval: CMTime = CMTimeMakeWithSeconds(1.0, 10)
-        timeObserver = MVMediaManager.sharedInstance.avPlayer.addPeriodicTimeObserver(forInterval: timeInterval, queue: DispatchQueue.main) { (elapsedTime: CMTime) -> Void in
+        timeObserver = MVMediaManager.shared.avPlayer.addPeriodicTimeObserver(forInterval: timeInterval, queue: DispatchQueue.main) { (elapsedTime: CMTime) -> Void in
             //print("elapsedTime now:", CMTimeGetSeconds(elapsedTime))
             self.observeTime(elapsedTime)
         } as AnyObject?
@@ -274,7 +274,7 @@ extension MVMediaManager {
     }
     
     fileprivate func observeTime(_ elapsedTime: CMTime) {
-        let duration = CMTimeGetSeconds(MVMediaManager.sharedInstance.avPlayer.currentItem!.duration)
+        let duration = CMTimeGetSeconds(MVMediaManager.shared.avPlayer.currentItem!.duration)
         if duration.isFinite {
             //            let elapsedTime = CMTimeGetSeconds(elapsedTime)
             //            let timeRemaining: Float64 = duration - elapsedTime
@@ -288,7 +288,7 @@ extension MVMediaManager {
 extension MVMediaManager {
     
     fileprivate func removeBufferObserver(){
-        MVMediaManager.sharedInstance.avPlayer.removeObserver(self, forKeyPath: "currentItem.playbackLikelyToKeepUp")
+        MVMediaManager.shared.avPlayer.removeObserver(self, forKeyPath: "currentItem.playbackLikelyToKeepUp")
     }
     
     fileprivate func addBufferObserver(){
@@ -298,7 +298,7 @@ extension MVMediaManager {
     override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         
         if context == &playbackLikelyToKeepUpContext {
-            if MVMediaManager.sharedInstance.avPlayer.currentItem!.isPlaybackLikelyToKeepUp {
+            if MVMediaManager.shared.avPlayer.currentItem!.isPlaybackLikelyToKeepUp {
                 notificationCenter.post(name: Notification.Name(rawValue: kMVMediaStopedBuffering), object: nil)
                 updateMediaInfo()
             } else {
@@ -386,13 +386,13 @@ extension MVMediaManager {
         mediaInfo = nowPlayingInfo
     }
     
-    public func updateMediaInfo(_ item: AVPlayerItem? = MVMediaManager.sharedInstance.avPlayer.currentItem){
+    public func updateMediaInfo(_ item: AVPlayerItem? = MVMediaManager.shared.avPlayer.currentItem){
         if let item = item {
             var nowPlayingInfo = mediaInfo
             
             nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = NSNumber(value: CMTimeGetSeconds(item.currentTime()) as Double)
             nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = NSNumber(value: CMTimeGetSeconds(item.duration) as Double)
-            nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = NSNumber(value: MVMediaManager.sharedInstance.avPlayer.rate as Float)
+            nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = NSNumber(value: MVMediaManager.shared.avPlayer.rate as Float)
             
             mediaInfo = nowPlayingInfo
         }

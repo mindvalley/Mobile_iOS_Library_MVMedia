@@ -45,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
         //sets interface orientation support for specific views
         
-        if MVMediaManager.sharedInstance.isPlayingVideo {
+        if MVMediaManager.shared.isPlayingLandscapeMedia {
             return .landscapeRight;
         } else {
             return .portrait;

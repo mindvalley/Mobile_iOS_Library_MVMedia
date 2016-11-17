@@ -8,11 +8,11 @@
 
 import UIKit
 
-open class MVMediaVideoNavigationViewController: UINavigationController {
+open class MVMediaLandscapeNavigationController: UINavigationController {
 
     override open func viewDidLoad() {
         super.viewDidLoad()
-        MVMediaManager.sharedInstance.isPlayingVideo = true
+        MVMediaManager.shared.isPlayingLandscapeMedia = true
     }
     
     override open func viewWillAppear(_ animated: Bool) {
@@ -25,7 +25,7 @@ open class MVMediaVideoNavigationViewController: UINavigationController {
     
     override open func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        MVMediaManager.sharedInstance.isPlayingVideo = false
+        MVMediaManager.shared.isPlayingLandscapeMedia = false
         
         //to make sure it will rotate, trick it saying that it was in landscape before
         UIDevice.current.setValue(Int(UIInterfaceOrientation.landscapeRight.rawValue), forKey: "orientation")

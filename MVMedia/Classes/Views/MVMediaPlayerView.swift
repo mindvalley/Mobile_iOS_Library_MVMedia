@@ -15,75 +15,75 @@ import MediaPlayer
 open class MVMediaPlayerView: UIView {
     
     open override func awakeFromNib() {
-        self.layer.insertSublayer(MVMediaManager.sharedInstance.avPlayerLayer, at: 0)
+        self.layer.insertSublayer(MVMediaManager.shared.avPlayerLayer, at: 0)
     }
     
-    open func playItem(withUrl url: URL?) -> Bool {
-        return MVMediaManager.sharedInstance.playItem(withUrl: url)
+    open func prepareMedia(withUrl url: URL?, startPlaying: Bool = false) -> Bool {
+        return MVMediaManager.shared.prepareMedia(withUrl: url, startPlaying: startPlaying)
     }
     
     override open func layoutSublayers(of layer: CALayer) {
         super.layoutSublayers(of: layer)
-        MVMediaManager.sharedInstance.avPlayerLayer.frame = CGRect(x: 0, y: 0, width: self.bounds.size.width, height: self.bounds.size.height)
+        MVMediaManager.shared.avPlayerLayer.frame = CGRect(x: 0, y: 0, width: self.bounds.size.width, height: self.bounds.size.height)
     }
 }
 
 extension MVMediaPlayerView {
     
     public func play(){
-        MVMediaManager.sharedInstance.play()
+        MVMediaManager.shared.play()
     }
     
     public func pause(){
-        MVMediaManager.sharedInstance.pause()
+        MVMediaManager.shared.pause()
     }
     
     public func stop(){
-        MVMediaManager.sharedInstance.stop()
+        MVMediaManager.shared.stop()
     }
     
     public func togglePlay(){
-        MVMediaManager.sharedInstance.togglePlay()
+        MVMediaManager.shared.togglePlay()
     }
     
     public func toggleRateSpeed() -> Float{
-        return MVMediaManager.sharedInstance.toggleRateSpeed()
+        return MVMediaManager.shared.toggleRateSpeed()
     }
     
     public func rewind10(){
-        MVMediaManager.sharedInstance.rewind10()
+        MVMediaManager.shared.rewind10()
     }
     
     public func sliderValueUpdated(_ timeSliderValue: Float){
-        MVMediaManager.sharedInstance.sliderValueUpdated(timeSliderValue)
+        MVMediaManager.shared.sliderValueUpdated(timeSliderValue)
     }
     
     public func beginSeeking() {
-        MVMediaManager.sharedInstance.beginSeeking()
+        MVMediaManager.shared.beginSeeking()
     }
     
     public func endSeeking(_ timeSliderValue: Float) {
-        MVMediaManager.sharedInstance.endSeeking(timeSliderValue)
+        MVMediaManager.shared.endSeeking(timeSliderValue)
     }
     
     public func seek(addingSeconds seconds: Double){
-        MVMediaManager.sharedInstance.seek(addingSeconds: seconds)
+        MVMediaManager.shared.seek(addingSeconds: seconds)
     }
     
     public func seek(toTime time: Double){
-        MVMediaManager.sharedInstance.seek(toTime: time)
+        MVMediaManager.shared.seek(toTime: time)
     }
     
     public func currentTime() -> Double{
-        return MVMediaManager.sharedInstance.currentTime()
+        return MVMediaManager.shared.currentTime()
     }
     
     public func configBackgroundPlay() {
-        MVMediaManager.sharedInstance.configBackgroundPlay()
+        MVMediaManager.shared.configBackgroundPlay()
     }
     
     public func addMediaInfo(_ author: String?, title: String?, coverImage: UIImage?) {
-        MVMediaManager.sharedInstance.addMediaInfo(author, title: title, coverImage: coverImage)
+        MVMediaManager.shared.addMediaInfo(author, title: title, coverImage: coverImage)
     }
 }
 

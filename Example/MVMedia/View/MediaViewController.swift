@@ -19,13 +19,4 @@ class MediaViewController: MVMediaViewController {
         return .lightContent
     }
     
-// MARK: - Navigation
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let viewController = segue.destination as? MediaMarkersViewController {
-            viewController.mvMediaMarkersViewModel.currentTime = mediaPlayer?.currentTime() ?? 0
-            viewController.mvMediaMarkersViewModel.markers = [MVMediaMarker(title: "First Marker", time: 1), MVMediaMarker(title: "Second Marker", time: 3)]
-            viewController.delegate = self
-        }
-    }
 }

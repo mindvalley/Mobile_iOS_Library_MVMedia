@@ -27,11 +27,11 @@
         </array>
     </customFonts>
     <scenes>
-        <!--Media Video Navigation Controller-->
+        <!--Media Landscape Navigation Controller-->
         <scene sceneID="Qhn-3J-hKw">
             <objects>
-                <navigationController storyboardIdentifier="MediaVideoNavigation" modalTransitionStyle="crossDissolve" modalPresentationStyle="overCurrentContext" id="Qxp-j4-0Tf" customClass="MediaVideoNavigationController" customModule="Micro_Learning_App" customModuleProvider="target" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="sG7-v6-do3">
+                <navigationController storyboardIdentifier="MediaVideoNavigation" modalTransitionStyle="crossDissolve" modalPresentationStyle="overCurrentContext" id="Qxp-j4-0Tf" customClass="MVMediaLandscapeNavigationController" customModule="MVMedia" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="sG7-v6-do3">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -45,10 +45,10 @@
             </objects>
             <point key="canvasLocation" x="-242" y="398"/>
         </scene>
-        <!--Media Video View Controller-->
+        <!--Media View Controller-->
         <scene sceneID="9Bf-CH-tG0">
             <objects>
-                <viewController storyboardIdentifier="MediaVideo" modalTransitionStyle="crossDissolve" modalPresentationStyle="overCurrentContext" id="1TK-HH-0kQ" customClass="MediaVideoViewController" customModule="Micro_Learning_App" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MediaVideo" modalTransitionStyle="crossDissolve" modalPresentationStyle="overCurrentContext" id="1TK-HH-0kQ" customClass="MediaViewController" customModule="MVMedia_Example" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="DAE-3X-4dz"/>
                         <viewControllerLayoutGuide type="bottom" id="R0R-5i-b8h"/>
@@ -228,6 +228,13 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="shouldSetupAutoHideControls" value="YES"/>
+                        <userDefinedRuntimeAttribute type="number" keyPath="startPlayingDelay">
+                            <real key="value" value="5"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="continuePlayingAfterClosing" value="NO"/>
+                    </userDefinedRuntimeAttributes>
                     <connections>
                         <outlet property="bottomBarView" destination="Zo5-GA-5iG" id="AMB-FE-TWL"/>
                         <outlet property="closeButton" destination="qAm-ny-c69" id="M0B-Tt-Rgd"/>
@@ -250,7 +257,7 @@
         <!--Media Markers View Controller-->
         <scene sceneID="Zkk-jr-fGC">
             <objects>
-                <viewController storyboardIdentifier="MediaMarkers" id="QAo-BG-hyF" customClass="MediaMarkersViewController" customModule="Micro_Learning_App" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MediaMarkers" id="QAo-BG-hyF" customClass="MVMediaMarkersViewController" customModule="MVMedia" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="rH0-ZS-pkn"/>
                         <viewControllerLayoutGuide type="bottom" id="SBj-hD-8iw"/>
@@ -286,7 +293,7 @@
                                                     </constraints>
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="JUMP TO" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OkB-LR-6GJ">
-                                                    <rect key="frame" x="22" y="37" width="240" height="15"/>
+                                                    <rect key="frame" x="22" y="38" width="240" height="14"/>
                                                     <fontDescription key="fontDescription" name="SFUIDisplay-Bold" family="SF UI Display" pointSize="12"/>
                                                     <color key="textColor" red="0.53725490196078429" green="0.53725490196078429" blue="0.53725490196078429" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -394,7 +401,7 @@
         <!--Media View Controller-->
         <scene sceneID="T3M-Nw-i7v">
             <objects>
-                <viewController storyboardIdentifier="MediaAudio" modalTransitionStyle="crossDissolve" modalPresentationStyle="overCurrentContext" id="hTc-GU-3HO" customClass="MediaViewController" customModule="Micro_Learning_App" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MediaAudio" modalTransitionStyle="crossDissolve" modalPresentationStyle="overCurrentContext" id="hTc-GU-3HO" customClass="MediaViewController" customModule="MVMedia_Example" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="eS5-EP-PQT"/>
                         <viewControllerLayoutGuide type="bottom" id="2jC-eD-BOz"/>
@@ -526,10 +533,10 @@
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="140"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="npX-B1-roh" customClass="DesignableView" customModule="MVUIHacks">
-                                                <rect key="frame" x="159.5" y="20" width="201.5" height="30"/>
+                                                <rect key="frame" x="167" y="20" width="194" height="30"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pc1-DD-fi0">
-                                                        <rect key="frame" x="163.5" y="0.0" width="38" height="30"/>
+                                                        <rect key="frame" x="156" y="0.0" width="38" height="30"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="38" id="Tnc-ja-8hE"/>
                                                         </constraints>
@@ -540,7 +547,7 @@
                                                         </connections>
                                                     </button>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1.2MB - DOWNLOADING" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jRB-6E-knB">
-                                                        <rect key="frame" x="11" y="0.0" width="144.5" height="30"/>
+                                                        <rect key="frame" x="11" y="0.0" width="137" height="30"/>
                                                         <fontDescription key="fontDescription" name="SFUIText-Bold" family="SF UI Text" pointSize="12"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -624,6 +631,9 @@
                             <constraint firstItem="SIV-GH-PKa" firstAttribute="leading" secondItem="T4a-G3-Cuu" secondAttribute="leading" id="yvq-1m-zIB"/>
                         </constraints>
                     </view>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="continuePlayingAfterClosing" value="YES"/>
+                    </userDefinedRuntimeAttributes>
                     <connections>
                         <outlet property="bottomBarView" destination="v45-Bb-LFl" id="dhe-wb-G0B"/>
                         <outlet property="contentView" destination="SIV-GH-PKa" id="fBO-TD-yxY"/>

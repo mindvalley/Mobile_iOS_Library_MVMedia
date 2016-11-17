@@ -29,11 +29,16 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
     @IBOutlet open weak var downloadView: UIView?
     @IBOutlet open weak var downloadLabel: UILabel?
     @IBOutlet open weak var downloadButton: UIButton?
+    @IBOutlet open weak var activity: UIButton?
     @IBOutlet open weak var mediaPlayer: MVMediaPlayerView?
     
     open var mvMediaViewModel = MVMediaViewModel()
     open var autoHideTimer: Timer?
-    open var shouldSetupAutoHideControls = true
+    private var autoPlayTimer: Timer?
+    
+    @IBInspectable open var shouldSetupAutoHideControls: Bool = false
+    @IBInspectable open var startPlayingDelay: Double = 0
+    @IBInspectable open var continuePlayingAfterClosing: Bool = true
     
     override open func viewDidLoad() {
         super.viewDidLoad()
@@ -44,12 +49,6 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         //visibleWhileDraggingView = mediaPlayer
         
         self.titleLabel?.text = mvMediaViewModel.title
-        
-        //Configures Media player
-        _ = mediaPlayer?.playItem(withUrl: mvMediaViewModel.mediaUrl)
-        
-        //configurates to play audio in background
-        mediaPlayer?.configBackgroundPlay()
         
         //update download view state
         updateDownloadView(mvMediaViewModel.mediaDownloadState, animated: false)
@@ -63,6 +62,13 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
             navigationController.setNavigationBarHidden(false, animated: true)
         }
         
+        //Configures Media player
+        mediaPlayer?.startLoadingAnimation()
+        _ = mediaPlayer?.prepareMedia(withUrl: mvMediaViewModel.mediaUrl, startPlaying: startPlayingDelay == 0)
+        
+        //configurates to play audio in background
+        mediaPlayer?.configBackgroundPlay()
+        
         //Add media observers
         addMediaObservers()
     }
@@ -70,6 +76,13 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
     override open func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.animateIn()
+        
+        if startPlayingDelay > 0 {
+            //start playing after a short delay so that the video quality is improved
+            autoPlayTimer = Timer.scheduledTimer(timeInterval: startPlayingDelay, target: self, selector: #selector(MVMediaViewController.startPlayingAfterDelay), userInfo: nil, repeats: false)
+        }
+        
+        setupAutoHideControlsTimer()
     }
     
     override open func viewWillDisappear(_ animated: Bool) {
@@ -77,6 +90,14 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         
         // Remove observers
         removeMediaObservers()
+        
+        //invalidate auto play mar
+        autoPlayTimer?.invalidate()
+        
+        if !continuePlayingAfterClosing {
+            //stop media
+            mediaPlayer?.stop()
+        }
     }
     
 //    func closeAnimated(_ distance: CGPoint) {
@@ -102,6 +123,16 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
             self.dismiss(animated: animated) {
                 
             }
+        }
+    }
+    
+// MARK: - Navigation
+    
+    override open func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let viewController = segue.destination as? MVMediaMarkersViewController {
+            viewController.mvMediaMarkersViewModel.currentTime = mediaPlayer?.currentTime() ?? 0
+            viewController.mvMediaMarkersViewModel.markers = self.mvMediaViewModel.mediaMarkers
+            viewController.delegate = self
         }
     }
     
@@ -140,6 +171,10 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
 // MARK: - Controls
     
     open func setupAutoHideControlsTimer(){
+        if !shouldSetupAutoHideControls {
+            return
+        }
+        
         //hides control after start playing
         autoHideTimer = Timer.scheduledTimer(timeInterval: videoAutoHideTime, target: self, selector: #selector(MVMediaViewController.hideControls), userInfo: nil, repeats: false)
     }
@@ -204,7 +239,7 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
     }
     
     @IBAction open func speed2ButtonPressed(_ sender: AnyObject) {
-        if MVMediaManager.sharedInstance.avPlayer.rate == 0 {
+        if MVMediaManager.shared.avPlayer.rate == 0 {
             return
         }
         
@@ -216,6 +251,13 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
                 speed2Button?.setTitle(String(format:"%.1fx", speed), for: .normal)
             }
         }
+    }
+    
+    open func startPlayingAfterDelay(){
+        mediaPlayer?.play()
+        
+        autoHideTimer?.invalidate()
+        hideControls()
     }
     
 // MARK: - Slider
@@ -250,21 +292,21 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
 // MARK: - MVMediaManager
     
     open func removeMediaObservers(){
-        MVMediaManager.sharedInstance.notificationCenter.removeObserver(self)
+        MVMediaManager.shared.notificationCenter.removeObserver(self)
     }
     
     open func addMediaObservers(){
         // Add observers
-        MVMediaManager.sharedInstance.notificationCenter.addObserver(self, selector: #selector(MVMediaViewController.mediaStartedBuffering(_:)), name: NSNotification.Name(rawValue: kMVMediaStartedBuffering), object: nil)
-        MVMediaManager.sharedInstance.notificationCenter.addObserver(self, selector: #selector(MVMediaViewController.mediaStopedBuffering(_:)), name: NSNotification.Name(rawValue: kMVMediaStopedBuffering), object: nil)
-        MVMediaManager.sharedInstance.notificationCenter.addObserver(self, selector: #selector(MVMediaViewController.mediaStartedPlaying(_:)), name: NSNotification.Name(rawValue: kMVMediaStartedPlaying), object: nil)
-        MVMediaManager.sharedInstance.notificationCenter.addObserver(self, selector: #selector(MVMediaViewController.mediaStopedPlaying(_:)), name: NSNotification.Name(rawValue: kMVMediaPausedPlaying), object: nil)
-        MVMediaManager.sharedInstance.notificationCenter.addObserver(self, selector: #selector(MVMediaViewController.mediaFinishedPlaying(_:)), name: NSNotification.Name(rawValue: kMVMediaFinishedPlaying), object: nil)
-        MVMediaManager.sharedInstance.notificationCenter.addObserver(self, selector: #selector(MVMediaViewController.mediaTimeHasUpdated(_:)), name: NSNotification.Name(rawValue: kMVMediaTimeUpdated), object: nil)
+        MVMediaManager.shared.notificationCenter.addObserver(self, selector: #selector(MVMediaViewController.mediaStartedBuffering(_:)), name: NSNotification.Name(rawValue: kMVMediaStartedBuffering), object: nil)
+        MVMediaManager.shared.notificationCenter.addObserver(self, selector: #selector(MVMediaViewController.mediaStopedBuffering(_:)), name: NSNotification.Name(rawValue: kMVMediaStopedBuffering), object: nil)
+        MVMediaManager.shared.notificationCenter.addObserver(self, selector: #selector(MVMediaViewController.mediaStartedPlaying(_:)), name: NSNotification.Name(rawValue: kMVMediaStartedPlaying), object: nil)
+        MVMediaManager.shared.notificationCenter.addObserver(self, selector: #selector(MVMediaViewController.mediaStopedPlaying(_:)), name: NSNotification.Name(rawValue: kMVMediaPausedPlaying), object: nil)
+        MVMediaManager.shared.notificationCenter.addObserver(self, selector: #selector(MVMediaViewController.mediaFinishedPlaying(_:)), name: NSNotification.Name(rawValue: kMVMediaFinishedPlaying), object: nil)
+        MVMediaManager.shared.notificationCenter.addObserver(self, selector: #selector(MVMediaViewController.mediaTimeHasUpdated(_:)), name: NSNotification.Name(rawValue: kMVMediaTimeUpdated), object: nil)
     }
     
     open func mediaTimeHasUpdated(_ notification: Notification) {
-        if let currentItem = MVMediaManager.sharedInstance.avPlayer.currentItem {
+        if let currentItem = MVMediaManager.shared.avPlayer.currentItem {
             let duration = CMTimeGetSeconds(currentItem.duration)
             let currentTime = CMTimeGetSeconds(currentItem.currentTime())
             let remainingTime = duration - currentTime
@@ -282,19 +324,36 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
     }
     
     open func mediaStartedPlaying(_ notification: Notification) {
+        mediaPlayer?.stopLoadingAnimation()
+        
         playButton?.isSelected = false
+        
+        setupAutoHideControlsTimer()
     }
     
     open func mediaStopedPlaying(_ notification: Notification) {
+        mediaPlayer?.stopLoadingAnimation()
+        
         playButton?.isSelected = true
+        
+        autoHideTimer?.invalidate()
     }
     
     open func mediaStartedBuffering(_ notification: Notification) {
-        
+        mediaPlayer?.startLoadingAnimation()
     }
     
     open func mediaStopedBuffering(_ notification: Notification) {
+        mediaPlayer?.stopLoadingAnimation()
         
+        if mvMediaViewModel.hideCoverAfterStarted {
+            UIView.animate(withDuration: 0.2, animations: {
+                self.coverImageView?.alpha = 0
+            }, completion: { (completed) in
+                self.coverImageView?.alpha = 1
+                self.coverImageView?.isHidden = true
+            })
+        }
     }
     
     open func mediaFinishedPlaying(_ notification: Notification) {

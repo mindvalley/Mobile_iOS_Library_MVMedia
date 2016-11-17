@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MVMedia
 
 class ViewController: UIViewController {
 
@@ -17,15 +18,16 @@ class ViewController: UIViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let navigationController = segue.destination as? MediaVideoNavigationController {
+        if let navigationController = segue.destination as? MVMediaLandscapeNavigationController {
             // video
-            if let viewController = navigationController.viewControllers.first as? MediaVideoViewController {
+            if let viewController = navigationController.viewControllers.first as? MediaViewController {
                 viewController.mvMediaViewModel.authorName = "Mindvalley"
                 viewController.mvMediaViewModel.coverImagePath = "http://asalesguyrecruiting.com/wp-content/uploads/2015/07/Youre-Awesome.jpg"
                 viewController.mvMediaViewModel.title = "You're awesome"
                 viewController.mvMediaViewModel.mediaUrl = URL(string: "http://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4")
                 viewController.mvMediaViewModel.downloadUrl = URL(string: "http://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4")
                 viewController.mvMediaViewModel.offlineAsset = false
+                viewController.mvMediaViewModel.mediaMarkers = [MVMediaMarker(title: "First Marker", time: 1), MVMediaMarker(title: "Second Marker", time: 3)]
             }
         }else if let viewController = segue.destination as? MediaViewController {
             // audio
