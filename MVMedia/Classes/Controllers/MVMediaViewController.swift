@@ -64,7 +64,7 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         
         //Configures Media player
         mediaPlayer?.startLoadingAnimation()
-        _ = mediaPlayer?.prepareMedia(withUrl: mvMediaViewModel.mediaUrl, startPlaying: startPlayingDelay == 0)
+        _ = mediaPlayer?.prepareMedia(withUrl: mvMediaViewModel.mediaPath?.url, startPlaying: startPlayingDelay == 0)
         
         //configurates to play audio in background
         mediaPlayer?.configBackgroundPlay()

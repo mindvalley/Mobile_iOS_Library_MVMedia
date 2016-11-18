@@ -17,15 +17,31 @@ public enum MVMediaDownloadState {
 open class MVMediaViewModel: NSObject {
     
     open var title: String?
-    open var mediaUrl: URL?
-    open var downloadUrl: URL?
+    open var mediaPath: String?
+    open var downloadPath: String?
     open var coverImagePath: String?
     open var authorName: String?
     open var offlineAsset = false
     open var mediaMarkers = [MVMediaMarker]()
     
+    func set(mediaPath: String, coverImagePath: String? = nil, authorName: String? = nil, title: String? = nil, downloadPath: String? = nil, hasOfflineAsset: Bool, mediaMarkers: [MVMediaMarker]? = nil){
+        self.mediaPath = mediaPath
+        self.downloadPath = downloadPath
+        self.title = title
+        self.authorName = authorName
+        self.offlineAsset = hasOfflineAsset
+        
+        if let mediaMarkers = mediaMarkers {
+            self.mediaMarkers = mediaMarkers
+        }
+    }
+    
     open var offlineFileDestination: URL?{
-        guard let downloadUrl = downloadUrl else {
+        guard let downloadPath = downloadPath else {
+            return nil
+        }
+        
+        guard let downloadUrl = URL(string: downloadPath) else {
             return nil
         }
         
@@ -45,8 +61,11 @@ open class MVMediaViewModel: NSObject {
     open var seeking = false
     
     open func downloadMedia(_ success:@escaping ()->Void, failure:@escaping ()->Void){
-        guard let downloadUrl = downloadUrl else {
-            failure()
+        guard let downloadPath = downloadPath else {
+            return
+        }
+        
+        guard let downloadUrl = URL(string: downloadPath) else {
             return
         }
         
@@ -74,4 +93,12 @@ open class MVMediaViewModel: NSObject {
             }).resume()
         }
     }
+}
+
+extension String {
+    
+    public var url: URL? {
+        return URL(string: self)
+    }
+    
 }

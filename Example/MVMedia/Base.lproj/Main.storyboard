@@ -29,7 +29,7 @@
                                 </constraints>
                                 <state key="normal" title="Play Video"/>
                                 <connections>
-                                    <segue destination="qsK-qe-eoY" kind="presentation" id="i1j-8H-Q0d"/>
+                                    <action selector="playVideo:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="qpE-9y-baU"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F6o-9C-Uls">
@@ -40,7 +40,7 @@
                                 </constraints>
                                 <state key="normal" title="Play Audio"/>
                                 <connections>
-                                    <segue destination="s8w-Be-Tgg" kind="presentation" id="Thm-Dj-JBf"/>
+                                    <action selector="playAudio:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="qWe-0x-3H5"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -55,22 +55,6 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-        </scene>
-        <!--MediaVideoNavigation-->
-        <scene sceneID="Yta-cf-6Sl">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Media" referencedIdentifier="MediaVideoNavigation" id="qsK-qe-eoY" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="RWB-cj-YtG" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="736" y="40"/>
-        </scene>
-        <!--MediaAudio-->
-        <scene sceneID="HTa-xl-Sat">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Media" referencedIdentifier="MediaAudio" id="s8w-Be-Tgg" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="SRp-al-Ift" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="706" y="246"/>
         </scene>
     </scenes>
 </document>
