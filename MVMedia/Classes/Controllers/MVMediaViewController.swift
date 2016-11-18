@@ -213,25 +213,25 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
     
 // MARK: - Events
     
-    @IBAction open func menuButtonPressed(_ sender: AnyObject) {
-    }
-    
     @IBAction open func closeButtonPressed(_ sender: AnyObject) {
+        (sender as? UIButton)?.animateTouchDown()
         animateOut {
             self.dismiss(false)
         }
     }
     
     @IBAction open func playButtonPressed(_ sender: AnyObject) {
+        (sender as? UIButton)?.animateTouchDown()
         mediaPlayer?.togglePlay()
     }
     
     @IBAction open func rewindButtonPressed(_ sender: AnyObject) {
+        (sender as? UIButton)?.animateTouchDown()
         mediaPlayer?.seek(addingSeconds: -10)
     }
     
     @IBAction open func markersButtonPressed(_ sender: AnyObject) {
-       
+        (sender as? UIButton)?.animateTouchDown()
     }
     
     @IBAction open func controlToggleButtonPressed(_ sender: AnyObject) {
@@ -239,6 +239,8 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
     }
     
     @IBAction open func speed2ButtonPressed(_ sender: AnyObject) {
+        (sender as? UIButton)?.animateTouchDown()
+        
         if MVMediaManager.shared.avPlayer.rate == 0 {
             return
         }
