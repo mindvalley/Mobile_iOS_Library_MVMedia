@@ -50,8 +50,8 @@ extension MVMediaMarkersViewModel{
 }
 
 public struct MVMediaMarker{
-    var title: String = ""
-    var time: Double = 0
+    public var title: String = ""
+    public var time: Double = 0
     
     public init(title: String, time: Double){
         self.title = title

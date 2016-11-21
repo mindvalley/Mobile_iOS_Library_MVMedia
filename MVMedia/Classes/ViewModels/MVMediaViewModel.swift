@@ -30,6 +30,7 @@ open class MVMediaViewModel: NSObject {
         self.title = title
         self.authorName = authorName
         self.offlineAsset = hasOfflineAsset
+        self.coverImagePath = coverImagePath
         
         if let mediaMarkers = mediaMarkers {
             self.mediaMarkers = mediaMarkers
