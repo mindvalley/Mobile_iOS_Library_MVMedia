@@ -40,6 +40,12 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
     @IBInspectable open var startPlayingDelay: Double = 0
     @IBInspectable open var continuePlayingAfterClosing: Bool = true
     
+    public var trackingDelegate: MVMediaTrackingDelegate?
+    
+    public var mediaType: MVMediaType {
+        return MVMediaManager.shared.avPlayer.currentItem?.tracks[0].currentVideoFrameRate == 0 ? .audio : .video
+    }
+    
     override open func viewDidLoad() {
         super.viewDidLoad()
         self.addTimeSliderActions()
@@ -253,6 +259,8 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
                 speed2Button?.setTitle(String(format:"%.1fx", speed), for: .normal)
             }
         }
+        
+        trackingDelegate?.media(withType: mediaType, didChangeSpeedTo: MVMediaManager.shared.avPlayer.rate)
     }
     
     open func startPlayingAfterDelay(){
@@ -331,6 +339,8 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         playButton?.isSelected = false
         
         setupAutoHideControlsTimer()
+        
+        trackingDelegate?.media(withType: mediaType, didStartPlaying: true)
     }
     
     open func mediaStopedPlaying(_ notification: Notification) {
@@ -339,6 +349,8 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         playButton?.isSelected = true
         
         autoHideTimer?.invalidate()
+        
+        trackingDelegate?.media(withType: mediaType, didStopPlaying: true)
     }
     
     open func mediaStartedBuffering(_ notification: Notification) {
@@ -366,6 +378,8 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
 
     open func markerSelected(marker: MVMediaMarker) {
         mediaPlayer?.seek(toTime: marker.time)
+        
+        trackingDelegate?.media(withType: mediaType, didSelectMarker: marker)
     }
     
 // MARK: - Download Events
@@ -402,6 +416,8 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         if toState == .downloaded {
             downloadButton?.isUserInteractionEnabled = false
         }
+        
+        trackingDelegate?.media(withType: mediaType, didDownloadMedia: toState == .downloaded)
     }
     
     open func changeDownloadView(_ toState: MVMediaDownloadState){
