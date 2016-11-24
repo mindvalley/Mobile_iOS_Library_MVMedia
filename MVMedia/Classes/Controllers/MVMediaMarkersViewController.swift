@@ -161,4 +161,8 @@ extension MVMediaMarkersViewController: UITableViewDelegate, UITableViewDataSour
         }
     }
     
+    public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.backgroundColor = .clear
+    }
+    
 }

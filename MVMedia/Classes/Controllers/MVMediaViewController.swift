@@ -58,6 +58,9 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         
         //update download view state
         updateDownloadView(mvMediaViewModel.mediaDownloadState, animated: false)
+        
+        //updates Speed
+        updateRateSpeed()
     }
     
     override open func viewWillAppear(_ animated: Bool) {
@@ -69,7 +72,7 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         }
         
         //Configures Media player
-        mediaPlayer?.startLoadingAnimation()
+        //mediaPlayer?.startLoadingAnimation()
         _ = mediaPlayer?.prepareMedia(withUrl: mvMediaViewModel.mediaPath?.url, startPlaying: startPlayingDelay == 0)
         
         //configurates to play audio in background
@@ -261,6 +264,17 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         }
         
         trackingDelegate?.media(withType: mediaType, didChangeSpeedTo: MVMediaManager.shared.avPlayer.rate)
+    }
+    
+    open func updateRateSpeed(){
+        let speed = MVMediaManager.shared.avPlayer.rate > 0 ? MVMediaManager.shared.avPlayer.rate : 1
+        
+        speed2Button?.setTitle(String(format:"%.0fx", speed), for: .normal)
+        if speed == 1.25 {
+            speed2Button?.setTitle(String(format:"%.2fx", speed), for: .normal)
+        }else if speed == 1.5 {
+            speed2Button?.setTitle(String(format:"%.1fx", speed), for: .normal)
+        }
     }
     
     open func startPlayingAfterDelay(){

@@ -88,7 +88,7 @@ extension MVMediaManager {
                                                object: avPlayer.currentItem)
         
         //start playing right away if not a video as we want to improve it's quality before start playing
-        if startPlaying {
+        if startPlaying && avPlayer.rate == 0 {
             play()
         }
         
