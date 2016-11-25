@@ -61,6 +61,9 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         
         //updates Speed
         updateRateSpeed()
+        
+        //updates Makers
+        updateMarkerButton()
     }
     
     override open func viewWillAppear(_ animated: Bool) {
@@ -91,7 +94,11 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
             autoPlayTimer = Timer.scheduledTimer(timeInterval: startPlayingDelay, target: self, selector: #selector(MVMediaViewController.startPlayingAfterDelay), userInfo: nil, repeats: false)
         }
         
+        //sets up auto hide controls
         setupAutoHideControlsTimer()
+        
+        //updates Makers
+        updateMarkerButton()
     }
     
     override open func viewWillDisappear(_ animated: Bool) {
@@ -275,6 +282,11 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         }else if speed == 1.5 {
             speed2Button?.setTitle(String(format:"%.1fx", speed), for: .normal)
         }
+    }
+    
+    open func updateMarkerButton(){
+        self.markersButton?.isEnabled = mvMediaViewModel.mediaMarkers.count > 0
+        self.markersButton?.alpha = mvMediaViewModel.mediaMarkers.count > 0 ? 1 : 0.5
     }
     
     open func startPlayingAfterDelay(){
