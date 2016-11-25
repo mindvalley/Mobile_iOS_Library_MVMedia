@@ -76,7 +76,7 @@ extension MVMediaManager {
             avPlayer.replaceCurrentItem(with: playerItem)
         }
         avPlayerLayer.player = avPlayer
-        avPlayerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        avPlayerLayer.videoGravity = UI_USER_INTERFACE_IDIOM() == .pad ? AVLayerVideoGravityResizeAspect : AVLayerVideoGravityResizeAspectFill
         
         //Adds observers
         addBufferObserver()
