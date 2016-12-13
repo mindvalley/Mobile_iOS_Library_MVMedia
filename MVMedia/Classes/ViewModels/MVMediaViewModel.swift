@@ -21,15 +21,13 @@ open class MVMediaViewModel: NSObject {
     open var downloadPath: String?
     open var coverImagePath: String?
     open var authorName: String?
-    open var offlineAsset = false
     open var mediaMarkers = [MVMediaMarker]()
     
-    func set(mediaPath: String, coverImagePath: String? = nil, authorName: String? = nil, title: String? = nil, downloadPath: String? = nil, hasOfflineAsset: Bool, mediaMarkers: [MVMediaMarker]? = nil){
+    func set(mediaPath: String, coverImagePath: String? = nil, authorName: String? = nil, title: String? = nil, downloadPath: String? = nil, mediaMarkers: [MVMediaMarker]? = nil){
         self.mediaPath = mediaPath
         self.downloadPath = downloadPath
         self.title = title
         self.authorName = authorName
-        self.offlineAsset = hasOfflineAsset
         self.coverImagePath = coverImagePath
         
         if let mediaMarkers = mediaMarkers {
@@ -51,11 +49,22 @@ open class MVMediaViewModel: NSObject {
     }
     
     open var mediaDownloadState: MVMediaDownloadState {
-        if offlineAsset {
-            return .downloaded
+        if let offlineFileDestination = offlineFileDestination {
+            if FileManager().fileExists(atPath: offlineFileDestination.path) {
+                print("File is offline")
+                return .downloaded
+            }
         }
         
         return .streaming
+    }
+    
+    open var mediaUrl: URL? {
+        if mediaDownloadState == .downloaded {
+            return offlineFileDestination
+        }
+        
+        return mediaPath?.url
     }
     
     open var hideCoverAfterStarted = false
@@ -63,10 +72,12 @@ open class MVMediaViewModel: NSObject {
     
     open func downloadMedia(_ success:@escaping ()->Void, failure:@escaping ()->Void){
         guard let downloadPath = downloadPath else {
+            failure()
             return
         }
         
         guard let downloadUrl = URL(string: downloadPath) else {
+            failure()
             return
         }
         
@@ -80,9 +91,12 @@ open class MVMediaViewModel: NSObject {
             print("The file already exists at path")
             success()
         } else {
-            // you can use NSURLSession.sharedSession to download the data asynchronously
             URLSession.shared.downloadTask(with: downloadUrl, completionHandler: { (location, response, error) -> Void in
-                guard let location = location , error == nil else { return }
+                guard let location = location , error == nil else {
+                    failure()
+                    return
+                }
+                
                 do {
                     try FileManager().moveItem(at: location, to: offlineFileDestination as URL)
                     print("File moved to documents folder")

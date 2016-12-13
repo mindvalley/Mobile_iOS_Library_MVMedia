@@ -68,6 +68,7 @@ extension MVMediaManager {
         }
         
         //only plays if it's not playing the same url
+        print("rate \(avPlayer.rate)")
         if avPlayer.rate == 0 || currentURL != url {
             currentURL = url
             
