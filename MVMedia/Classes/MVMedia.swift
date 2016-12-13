@@ -26,6 +26,19 @@ open class MVMedia: NSObject {
         return viewcontroller
     }
     
+    static open func offlineFileDestination(withPath path: String?) -> URL? {
+        guard let downloadPath = path else {
+            return nil
+        }
+        
+        guard let downloadUrl = URL(string: downloadPath) else {
+            return nil
+        }
+        
+        let documentsDirectoryURL =  FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
+        return documentsDirectoryURL.appendingPathComponent(downloadUrl.lastPathComponent)
+    }
+    
 }
 
 extension UIViewController {

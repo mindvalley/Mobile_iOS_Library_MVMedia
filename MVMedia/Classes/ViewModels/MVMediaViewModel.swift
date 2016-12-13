@@ -36,16 +36,7 @@ open class MVMediaViewModel: NSObject {
     }
     
     open var offlineFileDestination: URL?{
-        guard let downloadPath = downloadPath else {
-            return nil
-        }
-        
-        guard let downloadUrl = URL(string: downloadPath) else {
-            return nil
-        }
-        
-        let documentsDirectoryURL =  FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
-        return documentsDirectoryURL.appendingPathComponent(downloadUrl.lastPathComponent)
+        return MVMedia.offlineFileDestination(withPath: downloadPath)
     }
     
     open var mediaDownloadState: MVMediaDownloadState {
