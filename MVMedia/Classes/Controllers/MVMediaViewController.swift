@@ -123,7 +123,7 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         //invalidate auto play mar
         autoPlayTimer?.invalidate()
         
-        if !continuePlayingAfterClosing {
+        if !continuePlayingAfterClosing && !isPreviewing {
             //stop media
             mediaPlayer?.stop()
         }
@@ -209,6 +209,10 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
     }
     
     open func hideControls(){
+        if isPreviewing {
+            return
+        }
+        
         toggleControls(selected: NSNumber(value: true))
     }
     
@@ -227,7 +231,7 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
                 self.bottomBarView?.frame.origin.y = self.view.frame.size.height
             })
         }else{
-            self.bottomBarView?.translatesAutoresizingMaskIntoConstraints = true
+            self.bottomBarView?.translatesAutoresizingMaskIntoConstraints = false
             UIView.animate(withDuration: 0.2, animations: {
                 self.bottomBarView?.frame.origin.y = self.view.frame.size.height-(self.bottomBarView?.frame.size.height ?? 0)
             })
