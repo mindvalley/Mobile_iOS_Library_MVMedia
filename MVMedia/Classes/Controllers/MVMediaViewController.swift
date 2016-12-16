@@ -34,6 +34,8 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
     
     open var mvMediaViewModel = MVMediaViewModel()
     open var autoHideTimer: Timer?
+    open var isPreviewing = false
+    open var rewindStep: Double = -10
     private var autoPlayTimer: Timer?
     
     @IBInspectable open var shouldSetupAutoHideControls: Bool = false
@@ -43,7 +45,13 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
     public var trackingDelegate: MVMediaTrackingDelegate?
     
     public var mediaType: MVMediaType {
-        return MVMediaManager.shared.avPlayer.currentItem?.tracks[0].currentVideoFrameRate == 0 ? .audio : .video
+        if let currentItem = MVMediaManager.shared.avPlayer.currentItem {
+            if currentItem.tracks.count > 0 {
+                return currentItem.tracks[0].currentVideoFrameRate == 0 ? .audio : .video
+            }
+        }
+        
+        return .audio
     }
     
     override open func viewDidLoad() {
@@ -64,6 +72,9 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         
         //updates Makers
         updateMarkerButton()
+        
+        //start with controls disabled
+        enableControls(false)
     }
     
     override open func viewWillAppear(_ animated: Bool) {
@@ -76,7 +87,9 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         
         //Configures Media player
         //mediaPlayer?.startLoadingAnimation()
-        _ = mediaPlayer?.prepareMedia(withUrl: mvMediaViewModel.mediaUrl, startPlaying: startPlayingDelay == 0)
+        if (isPreviewing && MVMediaManager.shared.avPlayer.rate == 0) || !isPreviewing {
+            _ = mediaPlayer?.prepareMedia(withUrl: mvMediaViewModel.mediaUrl, startPlaying: startPlayingDelay == 0)
+        }
         
         //configurates to play audio in background
         mediaPlayer?.configBackgroundPlay()
@@ -187,7 +200,7 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
 // MARK: - Controls
     
     open func setupAutoHideControlsTimer(){
-        if !shouldSetupAutoHideControls {
+        if !shouldSetupAutoHideControls || isPreviewing {
             return
         }
         
@@ -243,7 +256,7 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
     
     @IBAction open func rewindButtonPressed(_ sender: AnyObject) {
         (sender as? UIButton)?.animateTouchDown()
-        mediaPlayer?.seek(addingSeconds: -10)
+        mediaPlayer?.seek(addingSeconds: rewindStep)
     }
     
     @IBAction open func markersButtonPressed(_ sender: AnyObject) {
@@ -296,6 +309,13 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         hideControls()
     }
     
+    open func enableControls(_ enable: Bool){
+        self.bottomBarView?.isUserInteractionEnabled = enable
+        UIView.animate(withDuration: 0.2, animations: {
+            self.bottomBarView?.alpha = enable ? 1.0 : 0.5
+        })
+    }
+    
 // MARK: - Slider
     
     open func addTimeSliderActions(){
@@ -343,19 +363,26 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
     
     open func mediaTimeHasUpdated(_ notification: Notification) {
         if let currentItem = MVMediaManager.shared.avPlayer.currentItem {
+            mediaPlayer?.stopLoadingAnimation()
+            enableControls(true)
+            
+            var currentTime = CMTimeGetSeconds(currentItem.currentTime())
+            if mvMediaViewModel.seeking {
+                if let value = timeSlider?.value {
+                    let sliderValue = Float(CMTimeGetSeconds(currentItem.duration)) * value
+                    currentTime = CMTimeGetSeconds(CMTimeMake(Int64(sliderValue), 1))
+                }
+                
+                autoHideTimer?.invalidate()
+            }else{
+                timeSlider?.value = Float(currentTime / CMTimeGetSeconds(currentItem.duration))
+            }
+            
             let duration = CMTimeGetSeconds(currentItem.duration)
-            let currentTime = CMTimeGetSeconds(currentItem.currentTime())
             let remainingTime = duration - currentTime
             
             self.minTimeLabel?.text = currentTime.formatedTime()
             self.maxTimeLabel?.text = remainingTime.formatedTime()
-            
-            //only updates slider if not being called by the user on the slider
-            if !mvMediaViewModel.seeking {
-                timeSlider?.value = Float(currentTime / CMTimeGetSeconds(currentItem.duration))
-            }else{
-                autoHideTimer?.invalidate()
-            }
         }
     }
     
