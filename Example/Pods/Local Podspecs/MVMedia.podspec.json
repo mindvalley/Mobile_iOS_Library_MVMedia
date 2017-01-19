@@ -1,22 +1,22 @@
 {
   "name": "MVMedia",
-  "version": "0.1.0",
-  "summary": "A short description of MVMedia.",
-  "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/<GITHUB_USERNAME>/MVMedia",
+  "version": "0.2.1",
+  "summary": "Play Sounds and Videos with AvPlayer.",
+  "description": "Play Media from any app using this library.",
+  "homepage": "https://github.com/mindvalley/Mobile_iOS_Library_MVMedia",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
   },
   "authors": {
-    "Evandro Harrison Hoffmann": "ehh85@yahoo.com.br"
+    "Evandro Harrison Hoffmann": "evandro@mindvalley.com"
   },
   "source": {
-    "git": "https://github.com/<GITHUB_USERNAME>/MVMedia.git",
-    "tag": "0.1.0"
+    "git": "https://github.com/mindvalley/Mobile_iOS_Library_MVMedia.git",
+    "tag": "0.2.1"
   },
   "platforms": {
     "ios": "8.0"
   },
-  "source_files": "MVMedia/Classes/**/*"
+  "source_files": "MVMedia/Classes/**/*.{swift}"
 }

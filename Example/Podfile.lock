@@ -1,16 +1,16 @@
 PODS:
-  - MVMedia (0.1.0)
+  - MVMedia (0.2.1)
 
 DEPENDENCIES:
   - MVMedia (from `../`)
 
 EXTERNAL SOURCES:
   MVMedia:
-    :path: "../"
+    :path: ../
 
 SPEC CHECKSUMS:
-  MVMedia: b30c8cec9606d8451c5401006e6c66ab9da2b52d
+  MVMedia: 2b7c3845b807741f4131d668c00f78710dc8a132
 
 PODFILE CHECKSUM: 0e448724cee102182a2864ada05cd6372e83e8f7
 
-COCOAPODS: 1.0.1
+COCOAPODS: 1.1.1
