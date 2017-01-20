@@ -417,7 +417,10 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
     open func mediaStopedBuffering(_ notification: Notification) {
         mediaPlayer?.stopLoadingAnimation()
         
-        if mvMediaViewModel.hideCoverAfterStarted {
+        /**
+         * whether we are presenting a video or we should hide the art cover.
+         */
+        if mvMediaViewModel.hideCoverAfterStarted || mvMediaViewModel.mediaType == .video {
             UIView.animate(withDuration: 0.2, animations: {
                 self.coverImageView?.alpha = 0
             }, completion: { (completed) in

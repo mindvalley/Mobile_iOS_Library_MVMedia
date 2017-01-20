@@ -22,13 +22,15 @@ open class MVMediaViewModel: NSObject {
     open var coverImagePath: String?
     open var authorName: String?
     open var mediaMarkers = [MVMediaMarker]()
+    open var mediaType: MVMediaType?
     
-    func set(mediaPath: String, coverImagePath: String? = nil, authorName: String? = nil, title: String? = nil, downloadPath: String? = nil, mediaMarkers: [MVMediaMarker]? = nil){
+    func set(mediaPath: String, coverImagePath: String? = nil, authorName: String? = nil, title: String? = nil, downloadPath: String? = nil, mediaMarkers: [MVMediaMarker]? = nil, mediaType: MVMediaType = .video){
         self.mediaPath = mediaPath
         self.downloadPath = downloadPath
         self.title = title
         self.authorName = authorName
         self.coverImagePath = coverImagePath
+        self.mediaType = mediaType
         
         if let mediaMarkers = mediaMarkers {
             self.mediaMarkers = mediaMarkers

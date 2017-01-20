@@ -1,6 +1,6 @@
 {
   "name": "MVMedia",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "summary": "Play Sounds and Videos with AvPlayer.",
   "description": "Play Media from any app using this library.",
   "homepage": "https://github.com/mindvalley/Mobile_iOS_Library_MVMedia",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/mindvalley/Mobile_iOS_Library_MVMedia.git",
-    "tag": "0.2.1"
+    "tag": "0.2.2"
   },
   "platforms": {
     "ios": "8.0"

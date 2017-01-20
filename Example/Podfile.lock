@@ -1,5 +1,5 @@
 PODS:
-  - MVMedia (0.2.1)
+  - MVMedia (0.2.2)
 
 DEPENDENCIES:
   - MVMedia (from `../`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  MVMedia: 2b7c3845b807741f4131d668c00f78710dc8a132
+  MVMedia: 86a13180e01747eccc77afa7024af3e93f691a33
 
 PODFILE CHECKSUM: 0e448724cee102182a2864ada05cd6372e83e8f7
 

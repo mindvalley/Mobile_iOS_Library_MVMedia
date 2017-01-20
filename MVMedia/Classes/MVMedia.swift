@@ -16,11 +16,33 @@ open class MVMedia: NSObject {
         let viewcontroller = storyboard.instantiateViewController(withIdentifier: viewControllerName)
         
         if let viewcontroller = viewcontroller as? MVMediaViewController {
-            viewcontroller.mvMediaViewModel.set(mediaPath: mediaPath, coverImagePath: coverImagePath, authorName: authorName, title: title, downloadPath: downloadPath, mediaMarkers: mediaMarkers)
+            
+            viewcontroller.mvMediaViewModel.set(
+                mediaPath: mediaPath,
+                coverImagePath: coverImagePath,
+                authorName: authorName,
+                title: title,
+                downloadPath: downloadPath,
+                mediaMarkers: mediaMarkers,
+                mediaType: .audio
+            )
+            
             viewcontroller.isPreviewing = previewing
-        }else if let navigationController = viewcontroller as? UINavigationController {
+            
+        } else if let navigationController = viewcontroller as? UINavigationController {
+            
             if let viewcontroller = navigationController.viewControllers.first as? MVMediaViewController {
-                viewcontroller.mvMediaViewModel.set(mediaPath: mediaPath, coverImagePath: coverImagePath, authorName: authorName, title: title, downloadPath: downloadPath, mediaMarkers: mediaMarkers)
+                
+                viewcontroller.mvMediaViewModel.set(
+                    mediaPath: mediaPath,
+                    coverImagePath: coverImagePath,
+                    authorName: authorName,
+                    title: title,
+                    downloadPath: downloadPath,
+                    mediaMarkers: mediaMarkers,
+                    mediaType: .video
+                )
+                
                 viewcontroller.isPreviewing = previewing
             }
         }
