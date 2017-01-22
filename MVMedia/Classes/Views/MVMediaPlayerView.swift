@@ -88,12 +88,17 @@ extension MVMediaPlayerView {
 }
 
 extension Float64 {
-    public func formatedTime() -> String {
-        return String(format: "%02d:%02d:%02d",
-                      ((lround(self) / 3600) % 60),
-                      ((lround(self) / 60) % 60),
-                      lround(self) % 60
-        )
+    public func formatedTime(showHours: Bool = false) -> String {
+        if showHours {
+            return String(format: "%02d:%02d:%02d",
+                          ((lround(self) / 3600) % 60),
+                          ((lround(self) / 60) % 60),
+                          lround(self) % 60)
+        }else{
+            return String(format: "%02d:%02d",
+                          ((lround(self) / 60) % 60),
+                          lround(self) % 60)
+        }
     }
 }
 

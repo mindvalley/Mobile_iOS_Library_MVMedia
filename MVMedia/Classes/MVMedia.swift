@@ -10,7 +10,7 @@ import UIKit
 
 open class MVMedia: NSObject {
 
-    static open func mediaViewController(withStoryboardName storyboardName: String, viewControllerName: String, mediaPath: String, coverImagePath: String? = nil, authorName: String? = nil, title: String? = nil, downloadPath: String? = nil, mediaMarkers: [MVMediaMarker]? = nil, previewing: Bool = false) -> UIViewController{
+    static open func mediaViewController(withStoryboardName storyboardName: String, viewControllerName: String, mediaPath: String, coverImagePath: String? = nil, authorName: String? = nil, title: String? = nil, downloadPath: String? = nil, showHours: Bool = false, mediaMarkers: [MVMediaMarker]? = nil, previewing: Bool = false) -> UIViewController{
         
         let storyboard = UIStoryboard(name: storyboardName, bundle: Bundle.main)
         let viewcontroller = storyboard.instantiateViewController(withIdentifier: viewControllerName)
@@ -24,7 +24,8 @@ open class MVMedia: NSObject {
                 title: title,
                 downloadPath: downloadPath,
                 mediaMarkers: mediaMarkers,
-                mediaType: .audio
+                mediaType: .audio,
+                showHours: showHours
             )
             
             viewcontroller.isPreviewing = previewing
@@ -40,7 +41,8 @@ open class MVMedia: NSObject {
                     title: title,
                     downloadPath: downloadPath,
                     mediaMarkers: mediaMarkers,
-                    mediaType: .video
+                    mediaType: .video,
+                    showHours: showHours
                 )
                 
                 viewcontroller.isPreviewing = previewing
@@ -67,9 +69,9 @@ open class MVMedia: NSObject {
 
 extension UIViewController {
     
-    open func openMedia(withStoryboardName storyboardName: String, viewControllerName: String, mediaPath: String, coverImagePath: String? = nil, authorName: String? = nil, title: String? = nil, downloadPath: String? = nil, mediaMarkers: [MVMediaMarker]? = nil) -> UIViewController?{
+    open func openMedia(withStoryboardName storyboardName: String, viewControllerName: String, mediaPath: String, coverImagePath: String? = nil, authorName: String? = nil, title: String? = nil, downloadPath: String? = nil, showHours: Bool = false, mediaMarkers: [MVMediaMarker]? = nil) -> UIViewController?{
         
-        let viewController = MVMedia.mediaViewController(withStoryboardName: storyboardName, viewControllerName: viewControllerName, mediaPath: mediaPath, coverImagePath: coverImagePath, authorName: authorName, title: title, downloadPath: downloadPath, mediaMarkers: mediaMarkers)
+        let viewController = MVMedia.mediaViewController(withStoryboardName: storyboardName, viewControllerName: viewControllerName, mediaPath: mediaPath, coverImagePath: coverImagePath, authorName: authorName, title: title, downloadPath: downloadPath, showHours: showHours, mediaMarkers: mediaMarkers)
         
         if let navigationController = viewController as? UINavigationController {
             self.present(viewController, animated: false, completion: nil)

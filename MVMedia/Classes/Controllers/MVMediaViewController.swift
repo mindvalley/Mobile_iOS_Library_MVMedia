@@ -86,7 +86,7 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         }
         
         //Configures Media player
-        //mediaPlayer?.startLoadingAnimation()
+        //mediaPlayer?.startMVMediaLoadingAnimation()
         if (isPreviewing && MVMediaManager.shared.avPlayer.rate == 0) || !isPreviewing {
             _ = mediaPlayer?.prepareMedia(withUrl: mvMediaViewModel.mediaUrl, startPlaying: startPlayingDelay == 0)
         }
@@ -161,6 +161,7 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         if let viewController = segue.destination as? MVMediaMarkersViewController {
             viewController.mvMediaMarkersViewModel.currentTime = mediaPlayer?.currentTime() ?? 0
             viewController.mvMediaMarkersViewModel.markers = self.mvMediaViewModel.mediaMarkers
+            viewController.mvMediaMarkersViewModel.showHours = self.mvMediaViewModel.showHours
             viewController.delegate = self
         }
     }
@@ -367,7 +368,7 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
     
     open func mediaTimeHasUpdated(_ notification: Notification) {
         if let currentItem = MVMediaManager.shared.avPlayer.currentItem {
-            mediaPlayer?.stopLoadingAnimation()
+            mediaPlayer?.stopMVMediaLoadingAnimation()
             enableControls(true)
             
             var currentTime = CMTimeGetSeconds(currentItem.currentTime())
@@ -385,13 +386,13 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
             let duration = CMTimeGetSeconds(currentItem.duration)
             let remainingTime = duration - currentTime
             
-            self.minTimeLabel?.text = currentTime.formatedTime()
-            self.maxTimeLabel?.text = remainingTime.formatedTime()
+            self.minTimeLabel?.text = currentTime.formatedTime(showHours: self.mvMediaViewModel.showHours)
+            self.maxTimeLabel?.text = remainingTime.formatedTime(showHours: self.mvMediaViewModel.showHours)
         }
     }
     
     open func mediaStartedPlaying(_ notification: Notification) {
-        mediaPlayer?.stopLoadingAnimation()
+        mediaPlayer?.stopMVMediaLoadingAnimation()
         
         playButton?.isSelected = false
         
@@ -401,7 +402,7 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
     }
     
     open func mediaStopedPlaying(_ notification: Notification) {
-        mediaPlayer?.stopLoadingAnimation()
+        mediaPlayer?.stopMVMediaLoadingAnimation()
         
         playButton?.isSelected = true
         
@@ -411,11 +412,11 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
     }
     
     open func mediaStartedBuffering(_ notification: Notification) {
-        mediaPlayer?.startLoadingAnimation()
+        mediaPlayer?.startMVMediaLoadingAnimation()
     }
     
     open func mediaStopedBuffering(_ notification: Notification) {
-        mediaPlayer?.stopLoadingAnimation()
+        mediaPlayer?.stopMVMediaLoadingAnimation()
         
         /**
          * whether we are presenting a video or we should hide the art cover.

@@ -12,6 +12,7 @@ open class MVMediaMarkersViewModel: NSObject {
     
     open var currentTime: Double?
     open var markers = [MVMediaMarker]()
+    open var showHours = false
     
 }
 
@@ -39,7 +40,7 @@ extension MVMediaMarkersViewModel{
         let cell = tableView.dequeueReusableCell(withIdentifier: "marker", for: indexPath) as! MVMediaMarkerTableViewCell
         
         cell.titleLabel.text = markers[indexPath.row].title
-        cell.timeLabel.text = markers[indexPath.row].time.formatedTime()
+        cell.timeLabel.text = markers[indexPath.row].time.formatedTime(showHours: showHours)
         
         return cell
     }

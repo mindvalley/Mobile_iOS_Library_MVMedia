@@ -24,7 +24,8 @@ class ViewController: UIViewController {
                       coverImagePath: "http://asalesguyrecruiting.com/wp-content/uploads/2015/07/Youre-Awesome.jpg",
                       authorName: "Mindvalley",
                       title: "You're awesome",
-                      downloadPath: "http://www.sample-videos.com/audio/mp3/india-national-anthem.mp3")
+                      downloadPath: "http://www.sample-videos.com/audio/mp3/india-national-anthem.mp3",
+                      showHours: true)
     }
     
     @IBAction func playVideo(_ sender: Any) {

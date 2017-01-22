@@ -10,15 +10,15 @@ import UIKit
 
 extension UIView {
     
-    func startLoadingAnimationDelayed(_ delay: Double){
+    func startMVMediaLoadingAnimationDelayed(_ delay: Double){
         let delayTime = DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
         DispatchQueue.main.asyncAfter(deadline: delayTime) {
-            self.startLoadingAnimation()
+            self.startMVMediaLoadingAnimation()
         }
     }
     
-    func startLoadingAnimation(){
-        stopLoadingAnimation()
+    func startMVMediaLoadingAnimation(){
+        stopMVMediaLoadingAnimation()
         
         let loadingView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
         loadingView.tintColor = UIColor.darkGray
@@ -33,7 +33,7 @@ extension UIView {
         }
     }
     
-    func stopLoadingAnimation(){
+    func stopMVMediaLoadingAnimation(){
         for subview in subviews{
             if let subview = subview as? UIActivityIndicatorView {
                 subview.removeFromSuperview()
