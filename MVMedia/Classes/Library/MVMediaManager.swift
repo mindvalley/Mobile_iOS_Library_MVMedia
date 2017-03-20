@@ -140,6 +140,8 @@ extension MVMediaManager {
                         
                     } else {
                         
+                        self.removeBufferObserverVideo()
+                        
                         // stream from url
                         let playerItem = AVPlayerItem(url: url)
                         self.avPlayer.replaceCurrentItem(with: playerItem)
