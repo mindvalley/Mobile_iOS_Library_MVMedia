@@ -28,6 +28,10 @@ open class MVMediaManager: NSObject {
     
     open static let shared = MVMediaManager()
     
+    fileprivate var hasObserver = false,
+    hasObserverMovie = false,
+    onPause = false
+    
     open let avPlayer = AVPlayer()
     open var avPlayerLayer = AVPlayerLayer()
     open let notificationCenter = NotificationCenter()
@@ -43,6 +47,7 @@ open class MVMediaManager: NSObject {
     fileprivate var playerRateBeforeSeek: Float = 0
     fileprivate var timeObserver: AnyObject?
     fileprivate var currentURL: URL?
+    fileprivate var mediaType: MVMediaType?
     
     open static func isPlaying(_ url: URL?) -> Bool {
         if MVMediaManager.shared.avPlayer.rate == 0 {
@@ -56,56 +61,227 @@ open class MVMediaManager: NSObject {
         return MVMediaManager.shared.currentURL == url
     }
     
+    public struct Constants {
+        public static let kMVMediaCloseMediaView = "kMVMediaCloseMediaView"
+    }
+    
 }
 
 // MARK: - Events
 
 extension MVMediaManager {
     
-    public func prepareMedia(withUrl url: URL?, replaceCurrent: Bool = false, startPlaying: Bool = false) -> Bool {
+    // MARK: - Media Preparation
+    
+    public func prepareMedia(withUrl url: URL?, replaceCurrent: Bool = false, startPlaying: Bool = false, mediaType: MVMediaType?, seekTo: Double = 0) -> Bool {
+        
         guard let url = url else {
             return false
         }
         
+        self.mediaType = mediaType
+        
         //only plays if it's not playing the same url
         print("rate \(avPlayer.rate)")
+        
+        print("readyToPlay: url: \(url)")
+        
         if avPlayer.rate == 0 || currentURL != url {
-            currentURL = url
             
-            //stream from url
-            let playerItem = AVPlayerItem(url: url)
-            avPlayer.replaceCurrentItem(with: playerItem)
-        }
-        avPlayerLayer.player = avPlayer
-        avPlayerLayer.videoGravity = UI_USER_INTERFACE_IDIOM() == .pad ? AVLayerVideoGravityResizeAspect : AVLayerVideoGravityResizeAspectFill
-        
-        //Adds observers
-        addBufferObserver()
-        addTimeObserver()
-        
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(MVMediaManager.didFinishPlaying(_:)),
-                                               name: .AVPlayerItemDidPlayToEndTime,
-                                               object: avPlayer.currentItem)
-        
-        //start playing right away if not a video as we want to improve it's quality before start playing
-        if startPlaying && avPlayer.rate == 0 {
-            play()
+            if let mediaType = mediaType, mediaType == .audio {
+                
+                print("readyToPlay: AUDIO")
+                
+                if currentURL == url {
+                    play()
+                } else {
+                    let asset = AVAsset.init(url: url)
+                    asset.loadValuesAsynchronously(forKeys: ["playable"] , completionHandler: {
+                        
+                        var error: NSError? = nil
+                        let status = asset.statusOfValue(forKey: "playable", error: &error)
+                        
+                        switch status {
+                        case .loaded:
+                            self.loadAudioMedia(asset: asset, startPlaying: startPlaying, seekTo: seekTo)
+                        default: break
+                            // Handle all other cases
+                        }
+                        
+                    })
+                }
+                
+            } else {
+                
+                if currentURL == url {
+                    
+                    // play right away
+                    self.addBufferObserverVideo()
+                    self.bufferingFor(seconds: 0.5, andPlayAfterSeekingFor: -1)
+                    
+                } else {
+                    
+                    if url.pathExtension == "m3u8" {
+                        
+                        let asset = AVURLAsset.init(url: url)
+                        asset.loadValuesAsynchronously(forKeys: ["playable"], completionHandler: {
+                            
+                            var error: NSError? = nil
+                            let status = asset.statusOfValue(forKey: "playable", error: &error)
+                            
+                            switch status {
+                            case .loaded:
+                                self.loadVideoMedia(asset: asset, startPlaying: startPlaying, bufferTime: 0, seekTo: seekTo)
+                            default: break
+                                // Handle all other cases
+                            }
+                            
+                        })
+                        
+                    } else {
+                        
+                        // stream from url
+                        let playerItem = AVPlayerItem(url: url)
+                        self.avPlayer.replaceCurrentItem(with: playerItem)
+                        
+                        self.avPlayerLayer.player = self.avPlayer
+                        self.avPlayerLayer.videoGravity = UI_USER_INTERFACE_IDIOM() == .pad ?
+                            AVLayerVideoGravityResizeAspect : AVLayerVideoGravityResizeAspectFill
+                        
+                        //Adds observers
+                        self.addBufferObserver()
+                        self.addTimeObserver()
+                        
+                        NotificationCenter.default.addObserver(
+                            self,
+                            selector: #selector(MVMediaManager.didFinishPlaying(_:)),
+                            name: .AVPlayerItemDidPlayToEndTime,
+                            object: self.avPlayer.currentItem
+                        )
+                        
+                        bufferingFor(seconds: 1, andPlayAfterSeekingFor: seekTo)
+                    }
+                }
+                
+            }
+            
+            // update to the new url
+            currentURL = url
         }
         
         return true
     }
     
+    func loadAudioMedia(asset: AVAsset, startPlaying: Bool = false, seekTo: Double) {
+        
+        DispatchQueue.main.async {
+            
+            self.removeBufferObserverVideo()
+            
+            //stream from url
+            let playerItem = AVPlayerItem.init(asset: asset)
+            self.avPlayer.replaceCurrentItem(with: playerItem)
+            
+            self.avPlayerLayer.player = self.avPlayer
+            self.avPlayerLayer.videoGravity = UI_USER_INTERFACE_IDIOM() == .pad ? AVLayerVideoGravityResizeAspect : AVLayerVideoGravityResizeAspectFill
+            
+            //Adds observers
+            self.addBufferObserver()
+            self.addTimeObserver()
+            
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(MVMediaManager.didFinishPlaying(_:)),
+                                                   name: .AVPlayerItemDidPlayToEndTime,
+                                                   object: self.avPlayer.currentItem)
+            
+            if #available(iOS 10.0, *) {
+                self.avPlayer.automaticallyWaitsToMinimizeStalling = false
+                if let currentItem = self.avPlayer.currentItem {
+                    currentItem.preferredPeakBitRate = 15
+                    currentItem.preferredForwardBufferDuration = 200
+                    currentItem.canUseNetworkResourcesForLiveStreamingWhilePaused = true
+                }
+            }
+            
+            //start playing right away if not a video as we want to improve it's quality before start playing
+            if startPlaying && self.avPlayer.rate == 0 {
+                if seekTo > 0 {
+                    self.seek(toTime: self.calcSeekTime(seekTime: seekTo))
+                }
+                self.play()
+            }
+        }
+    }
+    
+    // When playing .m3u8 files we must prepare it differently
+    func loadVideoMedia(asset: AVAsset, startPlaying: Bool = false, bufferTime: Double, seekTo: Double) {
+        
+        DispatchQueue.main.async {
+            
+            self.notificationCenter.post(name: Notification.Name(rawValue: kMVMediaStartedBuffering), object: nil)
+            
+            self.removeBufferObserverVideo()
+            
+            let playerItem = AVPlayerItem.init(asset: asset)
+            self.avPlayer.replaceCurrentItem(with: playerItem)
+            
+            self.avPlayerLayer.player = self.avPlayer
+            self.avPlayerLayer.videoGravity = UI_USER_INTERFACE_IDIOM() == .pad ?
+                AVLayerVideoGravityResizeAspect : AVLayerVideoGravityResizeAspectFill
+            
+            //Adds observers
+            self.addBufferObserverVideo()
+            self.addTimeObserver()
+            
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(MVMediaManager.didFinishPlaying(_:)),
+                name: .AVPlayerItemDidPlayToEndTime,
+                object: self.avPlayer.currentItem
+            )
+            
+            if #available(iOS 10.0, *) {
+                self.avPlayer.automaticallyWaitsToMinimizeStalling = false
+                if let currentItem = self.avPlayer.currentItem {
+                    currentItem.preferredPeakBitRate = 15
+                    currentItem.preferredForwardBufferDuration = 200
+                    currentItem.canUseNetworkResourcesForLiveStreamingWhilePaused = true
+                }
+            }
+            
+            self.bufferingFor(seconds: bufferTime, andPlayAfterSeekingFor: seekTo)
+            
+            // resetting the preferredPeakBitRate and forcing another call on play()
+            Timer.scheduledTimer(
+                timeInterval: 2.3,
+                target: self,
+                selector: #selector(self.resetSync),
+                userInfo: nil,
+                repeats: false
+            )
+        }
+    }
+    
+    public func resetSync () {
+        if let currentItem = MVMediaManager.shared.avPlayer.currentItem {
+            currentItem.preferredPeakBitRate = 0
+            play()
+        }
+    }
+    
     public func play(){
+        
         if avPlayer.currentItem == nil {
             return
         }
+        onPause = false
         avPlayer.play()
+        
         if playerLastRate > 1 {
             avPlayer.rate = playerLastRate
         }
         updateMediaInfo()
-     
+        
         notificationCenter.post(name: Notification.Name(rawValue: kMVMediaStartedPlaying), object: nil)
     }
     
@@ -113,6 +289,8 @@ extension MVMediaManager {
         if avPlayer.currentItem == nil {
             return
         }
+        
+        onPause = true
         
         playerLastRate = avPlayer.rate
         avPlayer.pause()
@@ -129,9 +307,6 @@ extension MVMediaManager {
         
         pause()
         
-        //clear current URL
-        currentURL = nil
-        
         //removes remote controls
         removePlayerControls()
         
@@ -146,7 +321,6 @@ extension MVMediaManager {
         if avPlayer.currentItem == nil {
             return
         }
-        
         
         let playerIsPlaying = avPlayer.rate > 0
         if playerIsPlaying {
@@ -191,6 +365,7 @@ extension MVMediaManager {
         
         playerRateBeforeSeek = avPlayer.rate
         pause()
+        onPause = false
     }
     
     public func endSeeking(_ timeSliderValue: Float) {
@@ -202,7 +377,7 @@ extension MVMediaManager {
             if self.playerRateBeforeSeek > 0 {
                 self.play()
             }
-        }) 
+        })
         
         notificationCenter.post(name: Notification.Name(rawValue: kMVMediaTimeFinishedUpdating), object: currentItem)
     }
@@ -222,6 +397,7 @@ extension MVMediaManager {
         }
         
         avPlayer.currentItem?.seek(to: CMTime(seconds: time, preferredTimescale: avPlayer.currentTime().timescale))
+        
     }
     
     public func currentTime() -> Double {
@@ -270,7 +446,7 @@ extension MVMediaManager {
         timeObserver = MVMediaManager.shared.avPlayer.addPeriodicTimeObserver(forInterval: timeInterval, queue: DispatchQueue.main) { (elapsedTime: CMTime) -> Void in
             //print("elapsedTime now:", CMTimeGetSeconds(elapsedTime))
             self.observeTime(elapsedTime)
-        } as AnyObject?
+            } as AnyObject?
         
     }
     
@@ -288,12 +464,32 @@ extension MVMediaManager {
 
 extension MVMediaManager {
     
+    func removeBufferObserverVideo() {
+        if hasObserverMovie {
+            hasObserverMovie = false
+            MVMediaManager.shared.avPlayer.currentItem?.removeObserver(self, forKeyPath: "playbackBufferEmpty")
+            MVMediaManager.shared.avPlayer.currentItem?.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
+        }
+    }
+    
+    func addBufferObserverVideo() {
+        if !hasObserverMovie {
+            hasObserverMovie = true
+            self.avPlayer.currentItem?.addObserver(self, forKeyPath: "playbackBufferEmpty", options: .new, context: nil)
+            self.avPlayer.currentItem?.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: .new, context: nil)
+        }
+    }
+    
     fileprivate func removeBufferObserver(){
-        MVMediaManager.shared.avPlayer.removeObserver(self, forKeyPath: "currentItem.playbackLikelyToKeepUp")
+        if hasObserver {
+            hasObserver = false
+            MVMediaManager.shared.avPlayer.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.status))
+        }
     }
     
     fileprivate func addBufferObserver(){
-        avPlayer.addObserver(self, forKeyPath: "currentItem.playbackLikelyToKeepUp", options: .new, context: &playbackLikelyToKeepUpContext)
+        hasObserver = true
+        MVMediaManager.shared.avPlayer.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.status), options: [.old, .new], context: &playbackLikelyToKeepUpContext)
     }
     
     override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -306,6 +502,62 @@ extension MVMediaManager {
                 notificationCenter.post(name: Notification.Name(rawValue: kMVMediaStartedBuffering), object: nil)
             }
         }
+        
+        guard keyPath != nil else {
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+            return
+        }
+        
+        switch keyPath! {
+            
+        case "playbackBufferEmpty" :
+            
+            if let item = avPlayer.currentItem, item.isPlaybackBufferEmpty, !onPause {
+                print("readyToPlay: no buffer")
+                // do something here to inform the user that the file is buffering
+                notificationCenter.post(name: Notification.Name(rawValue: kMVMediaStartedBuffering), object: nil)
+            }
+            
+        case "playbackLikelyToKeepUp" :
+            
+            if let item = avPlayer.currentItem, item.isPlaybackLikelyToKeepUp, !onPause {
+                print("readyToPlay: ▶️")
+                // remove the buffering inidcator if you added it
+                self.play()
+            }
+            
+        default:
+            break
+        }
+        
+    }
+    
+    func calcSeekTime(seekTime: Double) -> Double {
+        if seekTime > 0 {
+            if let currentItem = MVMediaManager.shared.avPlayer.currentItem {
+                let sliderValue = Float(CMTimeGetSeconds(currentItem.asset.duration)) * Float.init(seekTime)
+                if !sliderValue.isNaN {
+                    return CMTimeGetSeconds(CMTimeMake(Int64(sliderValue), 1))
+                }
+            }
+        }
+        return 0
+    }
+    
+    func bufferingFor(seconds: Double, andPlayAfterSeekingFor: Double) {
+        // seek to paused point
+        if andPlayAfterSeekingFor >= 0 {
+            seek(toTime: calcSeekTime(seekTime: andPlayAfterSeekingFor))
+        }
+        // start playing after some buffer
+        print("readyToPlay: bufferPlay \(seconds)")
+        Timer.scheduledTimer(
+            timeInterval: seconds,
+            target: self,
+            selector: #selector(play),
+            userInfo: nil,
+            repeats: false
+        )
     }
     
 }
@@ -388,7 +640,8 @@ extension MVMediaManager {
     }
     
     public func updateMediaInfo(_ item: AVPlayerItem? = MVMediaManager.shared.avPlayer.currentItem){
-        if let item = item {
+        // by now media info should only be shown for Audio
+        if let item = item, mediaType == .audio {
             var nowPlayingInfo = mediaInfo
             
             nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = NSNumber(value: CMTimeGetSeconds(item.currentTime()) as Double)
@@ -397,6 +650,10 @@ extension MVMediaManager {
             
             mediaInfo = nowPlayingInfo
         }
+    }
+    
+    public func isPlaying() -> Bool {
+        return avPlayer.rate != 0 && avPlayer.error == nil
     }
     
 }

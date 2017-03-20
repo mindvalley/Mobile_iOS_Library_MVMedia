@@ -20,22 +20,22 @@ class ViewController: UIViewController {
     @IBAction func playAudio(_ sender: Any) {
         _ = openMedia(withStoryboardName: "Media",
                       viewControllerName: "MediaAudio",
-                      mediaPath: "http://www.sample-videos.com/audio/mp3/india-national-anthem.mp3",
+                      mediaPath: "http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3",
                       coverImagePath: "http://asalesguyrecruiting.com/wp-content/uploads/2015/07/Youre-Awesome.jpg",
                       authorName: "Mindvalley",
                       title: "You're awesome",
-                      downloadPath: "http://www.sample-videos.com/audio/mp3/india-national-anthem.mp3",
+                      downloadPath: "http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3",
                       showHours: true)
     }
     
     @IBAction func playVideo(_ sender: Any) {
         _ = openMedia(withStoryboardName: "Media",
                       viewControllerName: "MediaVideoNavigation",
-                      mediaPath: "http://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4",
+                      mediaPath: "http://qthttp.apple.com.edgesuite.net/1010qwoeiuryfg/sl.m3u8",
                       coverImagePath: "http://asalesguyrecruiting.com/wp-content/uploads/2015/07/Youre-Awesome.jpg",
                       authorName: "Mindvalley",
                       title: "You're awesome",
-                      downloadPath: "http://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4",
+                      downloadPath: "http://qthttp.apple.com.edgesuite.net/1010qwoeiuryfg/sl.m3u8",
                       mediaMarkers: [MVMediaMarker(title: "First Marker", time: 1), MVMediaMarker(title: "Second Marker", time: 3)])
     }
 }

@@ -38,6 +38,8 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
     open var rewindStep: Double = -10
     private var autoPlayTimer: Timer?
     
+    open var seekToTime: Double = 0
+    
     @IBInspectable open var shouldSetupAutoHideControls: Bool = false
     @IBInspectable open var startPlayingDelay: Double = 0
     @IBInspectable open var continuePlayingAfterClosing: Bool = true
@@ -46,8 +48,8 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
     
     public var mediaType: MVMediaType {
         if let currentItem = MVMediaManager.shared.avPlayer.currentItem {
-            if currentItem.tracks.count > 0 {
-                return currentItem.tracks[0].currentVideoFrameRate == 0 ? .audio : .video
+            if currentItem.tracks.count > 1 {
+                return .video
             }
         }
         
@@ -85,12 +87,6 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
             navigationController.setNavigationBarHidden(false, animated: true)
         }
         
-        //Configures Media player
-        //mediaPlayer?.startMVMediaLoadingAnimation()
-        if (isPreviewing && MVMediaManager.shared.avPlayer.rate == 0) || !isPreviewing {
-            _ = mediaPlayer?.prepareMedia(withUrl: mvMediaViewModel.mediaUrl, startPlaying: startPlayingDelay == 0)
-        }
-        
         //configurates to play audio in background
         mediaPlayer?.configBackgroundPlay()
         
@@ -102,9 +98,15 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         super.viewDidAppear(animated)
         self.animateIn()
         
-        if startPlayingDelay > 0 {
-            //start playing after a short delay so that the video quality is improved
-            autoPlayTimer = Timer.scheduledTimer(timeInterval: startPlayingDelay, target: self, selector: #selector(MVMediaViewController.startPlayingAfterDelay), userInfo: nil, repeats: false)
+        // Configures Media player
+        mediaPlayer?.startMVMediaLoadingAnimation()
+        if (isPreviewing && MVMediaManager.shared.avPlayer.rate == 0) || !isPreviewing {
+            _ = mediaPlayer?.prepareMedia(
+                withUrl: mvMediaViewModel.mediaUrl,
+                startPlaying: startPlayingDelay == 0,
+                mediaType: mvMediaViewModel.mediaType,
+                seekTo: seekToTime
+            )
         }
         
         //sets up auto hide controls
@@ -155,7 +157,7 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         }
     }
     
-// MARK: - Navigation
+    // MARK: - Navigation
     
     override open func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let viewController = segue.destination as? MVMediaMarkersViewController {
@@ -166,7 +168,7 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         }
     }
     
-// MARK: - Animations
+    // MARK: - Animations
     
     open func prepareForAnimation(){
         self.contentView?.alpha = 0
@@ -181,7 +183,7 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
             UIView.animate(withDuration: 0.1, animations: {
                 self.contentView?.transform = CGAffineTransform(scaleX: 1, y: 1)
             })
-        }) 
+        })
     }
     
     open func animateOut(_ completion:@escaping ()->Void){
@@ -194,11 +196,11 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
                 self.contentView?.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
             }, completion: { (completed) in
                 completion()
-            }) 
-        }) 
+            })
+        })
     }
     
-// MARK: - Controls
+    // MARK: - Controls
     
     open func setupAutoHideControlsTimer(){
         if !shouldSetupAutoHideControls || isPreviewing {
@@ -239,15 +241,15 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         }
     }
     
-// MARK: - Cover Image
+    // MARK: - Cover Image
     
     open func finishedLoadingCoverImage(_ image: UIImage?){
         mediaPlayer?.addMediaInfo(mvMediaViewModel.authorName, title: mvMediaViewModel.title, coverImage: image )
     }
     
-// MARK: - Events
+    // MARK: - Events
     
-    @IBAction open func closeButtonPressed(_ sender: AnyObject) {
+    @IBAction open func closeButtonPressed(_ sender: AnyObject?) {
         (sender as? UIButton)?.animateTouchDown()
         animateOut {
             self.dismiss(false)
@@ -321,15 +323,26 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         })
     }
     
-// MARK: - Slider
+    open func applicationResignActive() {
+        if MVMediaManager.shared.isPlaying() {
+            // if playing video we should stop it
+            if mediaType == .video {
+                print("readyToPlay: ⏹")
+                MVMediaManager.shared.removeBufferObserverVideo()
+                closeButtonPressed(nil)
+            }
+        }
+    }
+    
+    // MARK: - Slider
     
     open func addTimeSliderActions(){
         timeSlider?.addTarget(self, action: #selector(timeSliderBeganTracking),
-                             for: .touchDown)
+                              for: .touchDown)
         timeSlider?.addTarget(self, action: #selector(timeSliderEndedTracking),
-                             for: [.touchUpInside, .touchUpOutside])
+                              for: [.touchUpInside, .touchUpOutside])
         timeSlider?.addTarget(self, action: #selector(timeSliderValueChanged),
-                             for: .valueChanged)
+                              for: .valueChanged)
     }
     
     @IBAction open func timeSliderValueChanged(_ sender: AnyObject) {
@@ -349,11 +362,12 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
             mediaPlayer?.endSeeking(value)
         }
     }
-
-// MARK: - MVMediaManager
+    
+    // MARK: - MVMediaManager
     
     open func removeMediaObservers(){
         MVMediaManager.shared.notificationCenter.removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     open func addMediaObservers(){
@@ -364,6 +378,7 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         MVMediaManager.shared.notificationCenter.addObserver(self, selector: #selector(MVMediaViewController.mediaStopedPlaying(_:)), name: NSNotification.Name(rawValue: kMVMediaPausedPlaying), object: nil)
         MVMediaManager.shared.notificationCenter.addObserver(self, selector: #selector(MVMediaViewController.mediaFinishedPlaying(_:)), name: NSNotification.Name(rawValue: kMVMediaFinishedPlaying), object: nil)
         MVMediaManager.shared.notificationCenter.addObserver(self, selector: #selector(MVMediaViewController.mediaTimeHasUpdated(_:)), name: NSNotification.Name(rawValue: kMVMediaTimeUpdated), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MVMediaViewController.applicationResignActive), name: NSNotification.Name(rawValue: MVMediaManager.Constants.kMVMediaCloseMediaView), object: nil)
     }
     
     open func mediaTimeHasUpdated(_ notification: Notification) {
@@ -434,16 +449,16 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
     open func mediaFinishedPlaying(_ notification: Notification) {
         dismiss(true)
     }
-
-// MARK: - Media Markers
-
+    
+    // MARK: - Media Markers
+    
     open func markerSelected(marker: MVMediaMarker) {
         mediaPlayer?.seek(toTime: marker.time)
         
         trackingDelegate?.media(withType: mediaType, didSelectMarker: marker)
     }
     
-// MARK: - Download Events
+    // MARK: - Download Events
     
     @IBAction open func downloadButtonPressed(_ sender: AnyObject) {
         self.updateDownloadView(.downloading, animated: true)
@@ -489,16 +504,17 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
             downloadButton?.isSelected = false
             break
         case .downloading:
-            downloadLabel?.text = "DOWNLOADING..."
+            downloadLabel?.text = NSLocalizedString("download_media", tableName: nil, bundle: Bundle.main, value: "", comment: "")
             downloadView?.backgroundColor = UIColor.init(white: 0, alpha: 0.43)
             downloadButton?.isSelected = false
             break
         case .downloaded:
-            downloadLabel?.text = "AVAILABLE OFFLINE"
+            downloadLabel?.text = NSLocalizedString("media_available_offline", tableName: nil, bundle: Bundle.main, value: "", comment: "")
             downloadView?.backgroundColor = UIColor.init(white: 0, alpha: 0.43)
             downloadButton?.isSelected = true
             
             break
         }
     }
+    
 }

@@ -18,8 +18,8 @@ open class MVMediaPlayerView: UIView {
         self.layer.insertSublayer(MVMediaManager.shared.avPlayerLayer, at: 0)
     }
     
-    open func prepareMedia(withUrl url: URL?, startPlaying: Bool = false) -> Bool {
-        return MVMediaManager.shared.prepareMedia(withUrl: url, startPlaying: startPlaying)
+    open func prepareMedia(withUrl url: URL?, startPlaying: Bool = false, mediaType: MVMediaType?, seekTo: Double) -> Bool {
+        return MVMediaManager.shared.prepareMedia(withUrl: url, startPlaying: startPlaying, mediaType: mediaType, seekTo: seekTo)
     }
     
     override open func layoutSublayers(of layer: CALayer) {
@@ -84,6 +84,10 @@ extension MVMediaPlayerView {
     
     public func addMediaInfo(_ author: String?, title: String?, coverImage: UIImage?) {
         MVMediaManager.shared.addMediaInfo(author, title: title, coverImage: coverImage)
+    }
+    
+    public func isPlaying() -> Bool {
+        return MVMediaManager.shared.isPlaying()
     }
 }
 
