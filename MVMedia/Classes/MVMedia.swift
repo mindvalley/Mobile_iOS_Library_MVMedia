@@ -69,18 +69,18 @@ open class MVMedia: NSObject {
 
 extension UIViewController {
     
-    open func openMedia(withStoryboardName storyboardName: String, viewControllerName: String, mediaPath: String, coverImagePath: String? = nil, authorName: String? = nil, title: String? = nil, downloadPath: String? = nil, showHours: Bool = false, mediaMarkers: [MVMediaMarker]? = nil) -> UIViewController?{
+    open func openMedia(withStoryboardName storyboardName: String, viewControllerName: String, animated: Bool? = nil, mediaPath: String, coverImagePath: String? = nil, authorName: String? = nil, title: String? = nil, downloadPath: String? = nil, showHours: Bool = false, mediaMarkers: [MVMediaMarker]? = nil) -> UIViewController?{
         
         let viewController = MVMedia.mediaViewController(withStoryboardName: storyboardName, viewControllerName: viewControllerName, mediaPath: mediaPath, coverImagePath: coverImagePath, authorName: authorName, title: title, downloadPath: downloadPath, showHours: showHours, mediaMarkers: mediaMarkers)
         
         if let navigationController = viewController as? UINavigationController {
-            self.present(viewController, animated: false, completion: nil)
+            self.present(viewController, animated: animated ?? false, completion: nil)
             
             return navigationController.viewControllers.first
         }
         
         //_ = self.navigationController?.pushViewController(viewController, animated: false)
-        self.present(viewController, animated: false, completion: nil)
+        self.present(viewController, animated: animated ?? false, completion: nil)
         return viewController
     }
     
