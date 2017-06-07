@@ -20,7 +20,7 @@ MVMedia is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'MVMedia', git: 'https://github.com/mindvalley/Mobile_iOS_Library_MVMedia.git', tag: '0.2.7'
+pod 'MVMedia', git: 'https://github.com/mindvalley/Mobile_iOS_Library_MVMedia.git', tag: '0.2.8'
 ```
 
 ## Author
