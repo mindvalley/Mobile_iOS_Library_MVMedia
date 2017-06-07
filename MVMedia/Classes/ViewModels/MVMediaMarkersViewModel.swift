@@ -40,7 +40,7 @@ extension MVMediaMarkersViewModel{
         let cell = tableView.dequeueReusableCell(withIdentifier: "marker", for: indexPath) as! MVMediaMarkerTableViewCell
         
         cell.titleLabel.text = markers[indexPath.row].title
-        cell.timeLabel.text = markers[indexPath.row].time.formatedTime(showHours: showHours)
+//        cell.timeLabel.text = markers[indexPath.row].time.formatedTime(showHours: showHours)
         
         return cell
     }

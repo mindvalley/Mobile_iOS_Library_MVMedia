@@ -401,8 +401,8 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
             let duration = CMTimeGetSeconds(currentItem.duration)
             let remainingTime = duration - currentTime
             
-            self.minTimeLabel?.text = currentTime.formatedTime(showHours: self.mvMediaViewModel.showHours)
-            self.maxTimeLabel?.text = remainingTime.formatedTime(showHours: self.mvMediaViewModel.showHours)
+//            self.minTimeLabel?.text = currentTime.formatedTime(showHours: self.mvMediaViewModel.showHours)
+//            self.maxTimeLabel?.text = remainingTime.formatedTime(showHours: self.mvMediaViewModel.showHours)
         }
     }
     
