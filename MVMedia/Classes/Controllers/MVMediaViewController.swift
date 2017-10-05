@@ -211,7 +211,7 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         autoHideTimer = Timer.scheduledTimer(timeInterval: videoAutoHideTime, target: self, selector: #selector(MVMediaViewController.hideControls), userInfo: nil, repeats: false)
     }
     
-    open func hideControls(){
+    @objc open func hideControls(){
         if isPreviewing {
             return
         }
@@ -323,7 +323,7 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         })
     }
     
-    open func applicationResignActive() {
+    @objc open func applicationResignActive() {
         if MVMediaManager.shared.isPlaying() {
             // if playing video we should stop it
             if mediaType == .video {
@@ -381,7 +381,7 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         NotificationCenter.default.addObserver(self, selector: #selector(MVMediaViewController.applicationResignActive), name: NSNotification.Name(rawValue: MVMediaManager.Constants.kMVMediaCloseMediaView), object: nil)
     }
     
-    open func mediaTimeHasUpdated(_ notification: Notification) {
+    @objc open func mediaTimeHasUpdated(_ notification: Notification) {
         if let currentItem = MVMediaManager.shared.avPlayer.currentItem {
             mediaPlayer?.stopMVMediaLoadingAnimation()
             enableControls(true)
@@ -406,7 +406,7 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         }
     }
     
-    open func mediaStartedPlaying(_ notification: Notification) {
+    @objc open func mediaStartedPlaying(_ notification: Notification) {
         mediaPlayer?.stopMVMediaLoadingAnimation()
         
         playButton?.isSelected = false
@@ -416,7 +416,7 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         trackingDelegate?.media(withType: mediaType, didStartPlaying: true)
     }
     
-    open func mediaStopedPlaying(_ notification: Notification) {
+    @objc open func mediaStopedPlaying(_ notification: Notification) {
         mediaPlayer?.stopMVMediaLoadingAnimation()
         
         playButton?.isSelected = true
@@ -426,11 +426,11 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         trackingDelegate?.media(withType: mediaType, didStopPlaying: true)
     }
     
-    open func mediaStartedBuffering(_ notification: Notification) {
+    @objc open func mediaStartedBuffering(_ notification: Notification) {
         mediaPlayer?.startMVMediaLoadingAnimation()
     }
     
-    open func mediaStopedBuffering(_ notification: Notification) {
+    @objc open func mediaStopedBuffering(_ notification: Notification) {
         mediaPlayer?.stopMVMediaLoadingAnimation()
         
         /**
@@ -446,7 +446,7 @@ open class MVMediaViewController: UIViewController, MVMediaMarkersViewController
         }
     }
     
-    open func mediaFinishedPlaying(_ notification: Notification) {
+    @objc open func mediaFinishedPlaying(_ notification: Notification) {
         dismiss(true)
     }
     

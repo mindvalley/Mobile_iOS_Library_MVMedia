@@ -32,7 +32,7 @@ class DragCloseViewController: UIViewController {
         self.draggableView?.addGestureRecognizer(pan)
     }
     
-    func pan(_ rec:UIPanGestureRecognizer) {
+    @objc func pan(_ rec:UIPanGestureRecognizer) {
         
         guard let draggableView = draggableView else {
             return
