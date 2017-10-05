@@ -148,7 +148,7 @@ extension MVMediaManager {
                         
                         self.avPlayerLayer.player = self.avPlayer
                         self.avPlayerLayer.videoGravity = UI_USER_INTERFACE_IDIOM() == .pad ?
-                            AVLayerVideoGravityResizeAspect : AVLayerVideoGravityResizeAspectFill
+                            AVLayerVideoGravity.resizeAspect : AVLayerVideoGravity.resizeAspectFill
                         
                         //Adds observers
                         self.addBufferObserver()
@@ -185,7 +185,7 @@ extension MVMediaManager {
             self.avPlayer.replaceCurrentItem(with: playerItem)
             
             self.avPlayerLayer.player = self.avPlayer
-            self.avPlayerLayer.videoGravity = UI_USER_INTERFACE_IDIOM() == .pad ? AVLayerVideoGravityResizeAspect : AVLayerVideoGravityResizeAspectFill
+            self.avPlayerLayer.videoGravity = UI_USER_INTERFACE_IDIOM() == .pad ? AVLayerVideoGravity.resizeAspect : AVLayerVideoGravity.resizeAspectFill
             
             //Adds observers
             self.addBufferObserver()
@@ -229,7 +229,7 @@ extension MVMediaManager {
             
             self.avPlayerLayer.player = self.avPlayer
             self.avPlayerLayer.videoGravity = UI_USER_INTERFACE_IDIOM() == .pad ?
-                AVLayerVideoGravityResizeAspect : AVLayerVideoGravityResizeAspectFill
+                AVLayerVideoGravity.resizeAspect : AVLayerVideoGravity.resizeAspectFill
             
             //Adds observers
             self.addBufferObserverVideo()
@@ -264,14 +264,14 @@ extension MVMediaManager {
         }
     }
     
-    public func resetSync () {
+    @objc public func resetSync () {
         if let currentItem = MVMediaManager.shared.avPlayer.currentItem {
             currentItem.preferredPeakBitRate = 0
             play()
         }
     }
     
-    public func play(){
+    @objc public func play(){
         
         if avPlayer.currentItem == nil {
             return
@@ -287,7 +287,7 @@ extension MVMediaManager {
         notificationCenter.post(name: Notification.Name(rawValue: kMVMediaStartedPlaying), object: nil)
     }
     
-    public func pause(){
+    @objc public func pause(){
         if avPlayer.currentItem == nil {
             return
         }
@@ -315,7 +315,7 @@ extension MVMediaManager {
         notificationCenter.post(name: Notification.Name(rawValue: kMVMediaStopedPlaying), object: nil)
     }
     
-    public func didFinishPlaying(_ sender: AnyObject){
+    @objc public func didFinishPlaying(_ sender: AnyObject){
         notificationCenter.post(name: Notification.Name(rawValue: kMVMediaFinishedPlaying), object: nil)
     }
     
@@ -418,7 +418,7 @@ extension MVMediaManager {
         seek(addingSeconds: -10)
     }
     
-    public func seekRemotely(_ seekEvent: MPSeekCommandEvent){
+    @objc public func seekRemotely(_ seekEvent: MPSeekCommandEvent){
         if (seekEvent.type == .beginSeeking) {
             print("Begin Seeking")
             //beginSeeking()
